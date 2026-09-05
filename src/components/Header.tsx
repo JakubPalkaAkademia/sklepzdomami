@@ -1,41 +1,32 @@
-"use client";
-
 import Link from "next/link";
-import { useCart } from "@/components/useCart";
+import { company } from "@/lib/company";
+
+const nav = [
+  { href: "#o-firmie", label: "Firma" },
+  { href: "#informacje", label: "Informacje" },
+  { href: "#kontakt", label: "Kontakt" },
+] as const;
 
 export function Header() {
-  const { count } = useCart();
-
   return (
-    <header className="sticky top-0 z-20 border-b border-black/10 bg-white/80 backdrop-blur dark:border-white/10 dark:bg-neutral-950/80">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="flex items-center gap-2 text-lg font-bold">
-          <span className="text-2xl" aria-hidden>
-            🏡
-          </span>
-          <span>
-            sklep<span className="text-indigo-600">z</span>domami
-          </span>
+    <header className="sticky top-0 z-30 border-b border-neutral-200/80 bg-white/90 backdrop-blur-md">
+      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-4 sm:px-8">
+        <Link
+          href="/"
+          className="text-[15px] font-medium tracking-[0.18em] uppercase text-neutral-900"
+        >
+          {company.brand}
         </Link>
-        <nav className="flex items-center gap-6 text-sm font-medium">
-          <Link href="/" className="hover:text-indigo-600">
-            Oferty
-          </Link>
-          <Link
-            href="/koszyk"
-            className="relative rounded-full bg-indigo-600 px-4 py-2 text-white transition hover:bg-indigo-700"
-            data-testid="cart-link"
-          >
-            Koszyk
-            {count > 0 && (
-              <span
-                className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full bg-amber-400 px-1.5 text-xs font-bold text-black"
-                data-testid="cart-count"
-              >
-                {count}
-              </span>
-            )}
-          </Link>
+        <nav className="flex items-center gap-6 text-[13px] tracking-[0.12em] uppercase text-neutral-800 sm:gap-10">
+          {nav.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="transition-opacity hover:opacity-50"
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>
