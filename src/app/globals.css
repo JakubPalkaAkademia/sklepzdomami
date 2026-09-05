@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+:root {
+  --vipp-dark: #222325;
+  --vipp-muted: #bab2a8;
+  --vipp-beige: #e8e4dd;
+  --vipp-white: #ffffff;
+  --vipp-black: #111111;
+  --background: var(--vipp-dark);
+  --foreground: var(--vipp-white);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans-face);
+  --font-display: var(--font-display-face);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--vipp-dark);
+  color: var(--vipp-white);
+  font-family: var(--font-sans-face), Helvetica, Arial, sans-serif;
+  font-weight: 300;
+}
+
+.font-display {
+  font-family: var(--font-display-face), "Times New Roman", serif;
+}
+
+.field-input {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  background: transparent;
+  padding: 0.65rem 0;
+  outline: none;
+  color: var(--vipp-black);
+  font-weight: 300;
+}
+
+.field-input:focus {
+  border-bottom-color: var(--vipp-black);
+}
