@@ -2,12 +2,17 @@ import { copy } from "@/lib/company";
 
 export function Intro() {
   return (
-    <section id="o-firmie" className="mx-auto max-w-xl px-5 py-24 text-center sm:px-8 sm:py-32">
-      <h1 className="text-[clamp(1.75rem,4.5vw,3.25rem)] font-medium leading-[1.15] tracking-[0.08em] text-neutral-900">
-        {copy.introHeadline}
-      </h1>
-      <p className="mt-10 text-left leading-[1.7] text-neutral-600">{copy.introLead1}</p>
-      <p className="mt-5 text-left leading-[1.7] text-neutral-600">{copy.introLead2}</p>
+    <section id="o-firmie" className="bg-[var(--vipp-dark)] px-4 py-16 sm:px-10 sm:py-24 lg:py-28">
+      <div className="mx-auto max-w-[1400px]">
+        <div className="ml-auto w-full max-w-[620px] lg:max-w-[52%]">
+          <h2 className="font-display text-[28px] font-light leading-[1.12] text-white sm:text-[40px] lg:text-[46px]">
+            {copy.introHeadline}
+          </h2>
+          <p className="mt-8 text-[15px] font-light leading-[1.75] text-[var(--vipp-muted)] sm:text-[16px]">
+            {copy.introLead}
+          </p>
+        </div>
+      </div>
     </section>
   );
 }

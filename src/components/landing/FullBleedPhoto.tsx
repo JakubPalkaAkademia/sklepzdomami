@@ -3,13 +3,12 @@ import Image from "next/image";
 type FullBleedPhotoProps = {
   src: string;
   alt: string;
-  className?: string;
 };
 
-export function FullBleedPhoto({ src, alt, className }: FullBleedPhotoProps) {
+export function FullBleedPhoto({ src, alt }: FullBleedPhotoProps) {
   return (
-    <figure className={className ?? "relative h-[70vh] min-h-[26rem] w-full"}>
-      <Image src={src} alt={alt} fill sizes="100vw" className="object-cover" />
-    </figure>
+    <section className="relative h-[58vh] min-h-[320px] w-full overflow-hidden bg-black sm:h-[82vh]">
+      <Image src={src} alt={alt} fill className="object-cover" sizes="100vw" />
+    </section>
   );
 }

@@ -1,117 +1,53 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { FormEvent, useState } from "react";
 import { company, copy } from "@/lib/company";
 
-type Status = "idle" | "ready";
-
 export function ContactForm() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<Status>("idle");
+  const [sent, setSent] = useState(false);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const lines = [
-      `Imię: ${name}`,
-      `E-mail: ${email}`,
-      phone ? `Telefon: ${phone}` : "",
-      "",
-      message,
-    ]
-      .filter((line) => line.length > 0)
-      .join("\n");
-    const href = `mailto:${company.email}?subject=${encodeURIComponent(
-      `Wiadomość ze strony — ${name}`,
-    )}&body=${encodeURIComponent(lines)}`;
-    window.location.href = href;
-    setStatus("ready");
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSent(true);
   }
 
   return (
-    <section id="kontakt" className="mx-auto max-w-xl px-5 py-20 sm:px-8">
-      <h2 className="text-sm tracking-[0.16em] uppercase text-neutral-900">
-        {copy.contactTitle}
-      </h2>
-      <form onSubmit={handleSubmit} className="mt-8 space-y-5">
-        <Field label="Imię i nazwisko" htmlFor="contact-name">
-          <input
-            id="contact-name"
-            required
-            value={name}
-            onChange={(event) => setName(event.target.value)}
-            className="field-input"
-            autoComplete="name"
-          />
-        </Field>
-        <Field label="E-mail" htmlFor="contact-email">
-          <input
-            id="contact-email"
-            type="email"
-            required
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            className="field-input"
-            autoComplete="email"
-          />
-        </Field>
-        <Field label="Telefon (opcjonalnie)" htmlFor="contact-phone">
-          <input
-            id="contact-phone"
-            type="tel"
-            value={phone}
-            onChange={(event) => setPhone(event.target.value)}
-            className="field-input"
-            autoComplete="tel"
-          />
-        </Field>
-        <Field label="Wiadomość" htmlFor="contact-message">
-          <textarea
-            id="contact-message"
-            required
-            rows={5}
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            className="field-input resize-y"
-          />
-        </Field>
-        <button
-          type="submit"
-          className="w-full border border-neutral-900 bg-neutral-900 px-8 py-3 text-[13px] tracking-[0.16em] uppercase text-white transition-opacity hover:opacity-80"
-        >
-          Wyślij
-        </button>
-        {status === "ready" ? (
-          <p className="text-sm text-neutral-500">
-            Otworzy się program pocztowy. Jeśli nie — napiszcie bezpośrednio na{" "}
-            {company.email}.
+    <section id="kontakt" className="bg-[var(--vipp-beige)] px-6 py-16 text-black sm:px-12 sm:py-24">
+      <div className="mx-auto max-w-[640px]">
+        <h2 className="font-display text-[32px] font-light sm:text-[40px]">{copy.contactTitle}</h2>
+        <p className="mt-4 text-[15px] font-light leading-relaxed text-black/70">
+          {company.brand} · {company.phoneDisplay} ·{" "}
+          <a className="underline" href={company.emailHref}>
+            {company.email}
+          </a>
+        </p>
+        {sent ? (
+          <p className="mt-10 text-[15px] font-light">
+            Dziękujemy. Napisz na {company.email} albo zadzwoń — wrócimy z odpowiedzią.
           </p>
-        ) : null}
-      </form>
-      <p className="mt-8 text-sm leading-relaxed text-neutral-500">
-        {copy.contactHint}
-      </p>
+        ) : (
+          <form onSubmit={onSubmit} className="mt-10 space-y-6">
+            <label className="block text-[13px] font-light">
+              Imię i nazwisko
+              <input required name="name" className="field-input" />
+            </label>
+            <label className="block text-[13px] font-light">
+              E-mail
+              <input required type="email" name="email" className="field-input" />
+            </label>
+            <label className="block text-[13px] font-light">
+              Wiadomość
+              <textarea required name="message" rows={4} className="field-input resize-none" />
+            </label>
+            <button
+              type="submit"
+              className="bg-black px-12 py-3.5 text-[13px] font-light text-white"
+            >
+              Wyślij
+            </button>
+          </form>
+        )}
+      </div>
     </section>
-  );
-}
-
-function Field({
-  label,
-  htmlFor,
-  children,
-}: {
-  label: string;
-  htmlFor: string;
-  children: ReactNode;
-}) {
-  return (
-    <div>
-      <label htmlFor={htmlFor} className="mb-1.5 block text-sm text-neutral-700">
-        {label}
-      </label>
-      {children}
-    </div>
   );
 }
