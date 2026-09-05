@@ -74,12 +74,12 @@ export const copy = {
 
 export const photos = {
   hero: {
-    src: "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2400&q=80",
-    alt: "Jezioro i las o zmierzchu",
+    src: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=2400&q=80",
+    alt: "Ciemna bryła domu wśród drzew o zmierzchu",
   },
   fullBleed: {
-    src: "https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=2400&q=80",
-    alt: "Ciemna stalowa bryła domu wśród drzew",
+    src: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=2400&q=80",
+    alt: "Ciemny las",
   },
   interior: {
     src: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=2400&q=80",
