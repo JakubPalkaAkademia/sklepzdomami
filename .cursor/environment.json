@@ -1,0 +1,13 @@
+{
+  "install": "npm ci",
+  "start": "npm run dev -- -p 43123 -H 0.0.0.0",
+  "repositoryDependencies": [
+    "https://github.com/JakubPalkaAkademia/sklepzdomami"
+  ],
+  "terminals": [
+    {
+      "name": "web",
+      "command": "npm run dev -- -p 43123 -H 0.0.0.0"
+    }
+  ]
+}
