@@ -1,4 +1,4 @@
-import { InfoAccordion } from "@/components/InfoAccordion";
+import { MapAndLotInfo } from "@/components/MapAndLotInfo";
 import { ProductStorySlider } from "@/components/ProductStorySlider";
 import { StickyBookNow } from "@/components/StickyBookNow";
 import { HeroVideo } from "@/components/HeroVideo";
@@ -221,21 +221,7 @@ export function ShelterPage() {
 
       <Spacer height="5vh" bg="#222325" />
 
-      <section className="m14-info" aria-labelledby="info-title">
-        <h2 id="info-title" className="m14-info__title m14-info__title--mobile">
-          {investment.specsTitle}
-        </h2>
-        <div className="m14-info__grid">
-          <div className="m14-info__media">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={investment.media.entrance} alt="wejście do domu" width={800} height={1000} loading="lazy" />
-          </div>
-          <div className="m14-info__panel">
-            <h2 className="m14-info__title">{investment.specsTitle}</h2>
-            <InfoAccordion />
-          </div>
-        </div>
-      </section>
+      <MapAndLotInfo />
 
       <Spacer height="5vh" bg="#d6d0c5" />
     </article>

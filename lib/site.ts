@@ -150,12 +150,17 @@ export const investment = {
     { src: "/render-para.jpg", alt: "Morzyczyn — plac budowy" },
   ],
   specsTitle: "informacje",
-  specs: [
+  lotSpecs: [
     { label: "obiekt", value: "dwa domy bliźniacze na jednej działce · 7A / 7B" },
     { label: "status", value: "w budowie" },
     { label: "adres inwestycji", value: "ul. Szmaragdowa 7, 73-108 Morzyczyn" },
+  ],
+  siteBasicsTitle: "podstawowe informacje",
+  siteBasics: [
     { label: "kontakt", value: `${studio.phone} · ${studio.email}` },
     { label: "zespół", value: "Martyna Miłowska & Jakub Palka" },
+    { label: "firma", value: site.legalName },
+    { label: "adres pracowni", value: `${studio.address}, ${studio.postalCode} ${studio.city}` },
   ],
 } as const;
 

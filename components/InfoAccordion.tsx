@@ -1,25 +1,35 @@
 "use client";
 
 import { useState } from "react";
+import { getBuildingTotalM2, type FloorPlan } from "@/lib/lots";
 import { investment } from "@/lib/site";
 
-type PanelKey = "ground" | "upper" | (typeof investment.specs)[number]["label"];
+type PanelKey = "ground" | "upper" | (typeof investment.lotSpecs)[number]["label"];
 
-const ALL_PANEL_KEYS: PanelKey[] = [
-  "ground",
-  "upper",
-  ...investment.specs.map((spec) => spec.label),
-];
+type InfoAccordionProps = {
+  groundFloor?: FloorPlan;
+  upperFloor?: FloorPlan;
+};
 
-function panelsExcept(closedKey: PanelKey): Partial<Record<PanelKey, boolean>> {
+function buildPanelKeys(): PanelKey[] {
+  return ["ground", "upper", ...investment.lotSpecs.map((spec) => spec.label)];
+}
+
+function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<PanelKey, boolean>> {
   return Object.fromEntries(
-    ALL_PANEL_KEYS.filter((key) => key !== closedKey).map((key) => [key, true]),
+    allKeys.filter((key) => key !== closedKey).map((key) => [key, true]),
   ) as Partial<Record<PanelKey, boolean>>;
 }
 
-export function InfoAccordion() {
+export function InfoAccordion({ groundFloor, upperFloor }: InfoAccordionProps) {
   const [openAll, setOpenAll] = useState(false);
   const [openPanels, setOpenPanels] = useState<Partial<Record<PanelKey, boolean>>>({});
+
+  const allPanelKeys = buildPanelKeys();
+  const ground = groundFloor ?? investment.groundFloor;
+  const upper = upperFloor ?? investment.upperFloor;
+  const buildingTotal =
+    groundFloor && upperFloor ? getBuildingTotalM2([groundFloor, upperFloor]) : undefined;
 
   const isPanelOpen = (key: PanelKey) => openAll || Boolean(openPanels[key]);
 
@@ -36,7 +46,7 @@ export function InfoAccordion() {
 
     if (openAll && !nextOpen) {
       setOpenAll(false);
-      setOpenPanels(panelsExcept(key));
+      setOpenPanels(panelsExcept(key, allPanelKeys));
       return;
     }
 
@@ -63,33 +73,36 @@ export function InfoAccordion() {
       <div className="m14-info__accordion">
         <details open={isPanelOpen("ground")}>
           <summary className="t-neue-14-bold" onClick={handleSummaryClick("ground")}>
-            {investment.groundFloor.label}
+            {ground.label}
           </summary>
           <div className="m14-info__content">
-            {investment.groundFloor.rooms.map((room) => (
+            {ground.rooms.map((room) => (
               <div key={room.name} className="m14-info__row">
                 <span>{room.name}</span>
                 <span>{room.area}</span>
               </div>
             ))}
-            <p className="m14-info__total">razem: {investment.groundFloor.total}</p>
+            <p className="m14-info__total">razem: {ground.total}</p>
           </div>
         </details>
         <details open={isPanelOpen("upper")}>
           <summary className="t-neue-14-bold" onClick={handleSummaryClick("upper")}>
-            {investment.upperFloor.label}
+            {upper.label}
           </summary>
           <div className="m14-info__content">
-            {investment.upperFloor.rooms.map((room) => (
+            {upper.rooms.map((room) => (
               <div key={room.name} className="m14-info__row">
                 <span>{room.name}</span>
                 <span>{room.area}</span>
               </div>
             ))}
-            <p className="m14-info__total">razem: {investment.upperFloor.total}</p>
+            <p className="m14-info__total">razem: {upper.total}</p>
+            {buildingTotal && (
+              <p className="m14-info__total">powierzchnia całkowita: {buildingTotal}</p>
+            )}
           </div>
         </details>
-        {investment.specs.map((spec) => (
+        {investment.lotSpecs.map((spec) => (
           <details key={spec.label} open={isPanelOpen(spec.label)}>
             <summary className="t-neue-14-bold" onClick={handleSummaryClick(spec.label)}>
               {spec.label}
