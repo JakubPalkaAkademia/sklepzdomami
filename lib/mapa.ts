@@ -6,6 +6,11 @@ export const mapCrop = {
   height: 1090,
 } as const;
 
+export const mapImageSize = {
+  width: 2400,
+  height: 2180,
+} as const;
+
 export const mapViewBox = {
   width: mapCrop.width,
   height: mapCrop.height,
@@ -65,10 +70,10 @@ export const mapLots: MapLot[] = [
 ];
 
 export const mapSection = {
-  title: "mapa inwestycji",
-  subtitle: "Szmaragdowa 7 — cztery lokale",
+  title: "Mapa inwestycji",
+  subtitle: "wybierz jeden z czterech domów.",
   image: "/mapa/mapa-base.png",
   imageAlt: "mapa działki Szmaragdowa 7 — najechanie na lokal odsłania jego warstwę",
-  imageWidth: 2400,
-  imageHeight: 2180,
+  imageWidth: mapImageSize.width,
+  imageHeight: mapImageSize.height,
 } as const;

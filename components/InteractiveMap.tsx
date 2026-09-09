@@ -3,7 +3,7 @@
 import { mapLots, mapSection, mapViewBox, type LotId, type PdfRect } from "@/lib/mapa";
 
 type InteractiveMapProps = {
-  previewLot: LotId;
+  hoveredLot: LotId | null;
   selectedLot: LotId;
   onHoverLot: (lot: LotId | null) => void;
   onSelectLot: (lot: LotId) => void;
@@ -20,18 +20,20 @@ function rectToSvg(rect: PdfRect) {
 }
 
 export function InteractiveMap({
-  previewLot,
+  hoveredLot,
   selectedLot,
   onHoverLot,
   onSelectLot,
 }: InteractiveMapProps) {
-  const previewLayer = mapLots.find((lot) => lot.id === previewLot)?.layerImage;
+  const previewLayer = hoveredLot
+    ? mapLots.find((lot) => lot.id === hoveredLot)?.layerImage
+    : null;
 
   return (
-    <section className="m16-map" aria-labelledby="map-title">
+    <section className="m16-map" aria-labelledby="map-title" aria-describedby="map-subtitle">
       <div className="m16-map__header">
         <h2 id="map-title" className="m16-map__title">{mapSection.title}</h2>
-        <p className="m16-map__subtitle t-neue-14">{mapSection.subtitle}</p>
+        <p id="map-subtitle" className="m16-map__subtitle">{mapSection.subtitle}</p>
       </div>
 
       <div className="m16-map__stage">
@@ -45,10 +47,10 @@ export function InteractiveMap({
           loading="lazy"
         />
 
-        {previewLayer && (
+        {previewLayer && hoveredLot && (
           // eslint-disable-next-line @next/next/no-img-element
           <img
-            key={previewLot}
+            key={hoveredLot}
             className="m16-map__layer m16-map__layer--active"
             src={previewLayer}
             alt=""
@@ -86,7 +88,7 @@ export function InteractiveMap({
       <div className="m16-map__buttons" role="group" aria-label="lokale na mapie">
         {mapLots.map((lot) => {
           const isSelected = selectedLot === lot.id;
-          const isPreview = previewLot === lot.id;
+          const isPreview = hoveredLot === lot.id;
 
           return (
             <button

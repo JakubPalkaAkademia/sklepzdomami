@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getBuildingTotalM2, type FloorPlan } from "@/lib/lots";
 import { investment } from "@/lib/site";
 
@@ -9,6 +9,7 @@ type PanelKey = "ground" | "upper" | (typeof investment.lotSpecs)[number]["label
 type InfoAccordionProps = {
   groundFloor?: FloorPlan;
   upperFloor?: FloorPlan;
+  onExpandedChange?: (expanded: boolean) => void;
 };
 
 function buildPanelKeys(): PanelKey[] {
@@ -21,11 +22,16 @@ function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<
   ) as Partial<Record<PanelKey, boolean>>;
 }
 
-export function InfoAccordion({ groundFloor, upperFloor }: InfoAccordionProps) {
+export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: InfoAccordionProps) {
   const [openAll, setOpenAll] = useState(false);
   const [openPanels, setOpenPanels] = useState<Partial<Record<PanelKey, boolean>>>({});
 
   const allPanelKeys = buildPanelKeys();
+  const isExpanded = openAll || allPanelKeys.some((key) => Boolean(openPanels[key]));
+
+  useEffect(() => {
+    onExpandedChange?.(isExpanded);
+  }, [isExpanded, onExpandedChange]);
   const ground = groundFloor ?? investment.groundFloor;
   const upper = upperFloor ?? investment.upperFloor;
   const buildingTotal =

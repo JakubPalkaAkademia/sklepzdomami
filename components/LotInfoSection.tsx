@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { BookNow } from "@/components/BookNow";
 import { InfoAccordion } from "@/components/InfoAccordion";
 import { investment } from "@/lib/site";
 import { getLotDetails, type FloorKey } from "@/lib/lots";
@@ -12,6 +13,7 @@ type LotInfoSectionProps = {
 
 export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
   const [activeFloor, setActiveFloor] = useState<FloorKey>("parter");
+  const [infoExpanded, setInfoExpanded] = useState(false);
   const lot = getLotDetails(displayLot);
   const floor = lot?.floors[activeFloor];
 
@@ -47,29 +49,20 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
                 role="tabpanel"
                 aria-label={floor.label}
                 style={{
-                  aspectRatio: `${lot.floors.parter.imageWidth} / ${lot.floors.parter.imageHeight}`,
+                  aspectRatio: `${floor.imageWidth} / ${floor.imageHeight}`,
                 }}
               >
-                {(Object.keys(lot.floors) as FloorKey[]).map((key) => {
-                  const floorPlan = lot.floors[key];
-                  const isActive = activeFloor === key;
-
-                  return (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img
-                      key={key}
-                      src={floorPlan.image}
-                      alt={floorPlan.imageAlt}
-                      width={floorPlan.imageWidth}
-                      height={floorPlan.imageHeight}
-                      loading="eager"
-                      decoding="async"
-                      hidden={!isActive}
-                      aria-hidden={!isActive}
-                      className={`m14-info__plan${isActive ? " m14-info__plan--active" : ""}`}
-                    />
-                  );
-                })}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  key={`${displayLot}-${activeFloor}`}
+                  src={floor.image}
+                  alt={floor.imageAlt}
+                  width={floor.imageWidth}
+                  height={floor.imageHeight}
+                  loading="eager"
+                  decoding="async"
+                  className="m14-info__plan"
+                />
               </div>
             </>
           ) : (
@@ -78,14 +71,21 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
             </p>
           )}
         </div>
-        <div className="m14-info__panel">
+        <div
+          className={`m14-info__panel${infoExpanded ? " m14-info__panel--expanded" : ""}`}
+        >
           <h2 className="m14-info__title">
             {`${investment.specsTitle} — ${displayLot}`}
           </h2>
           <InfoAccordion
+            key={displayLot}
             groundFloor={lot?.floors.parter}
             upperFloor={lot?.floors.pietro}
+            onExpandedChange={setInfoExpanded}
           />
+          <div className="m14-info__book-now">
+            <BookNow />
+          </div>
         </div>
       </div>
     </section>
