@@ -62,10 +62,8 @@ export function FeatureBlockSection({
           ))}
         </div>
       </div>
-      <div className="m5-two__mobile-text m5-two__copy">
-        {paragraphs.map((paragraph) => (
-          <p key={paragraph}>{paragraph}</p>
-        ))}
+      <div className="m5-two__mobile-text">
+        <p className="t-neue-14 m5-two__lake-copy">{paragraphs.join(" ")}</p>
       </div>
     </section>
   );

@@ -73,12 +73,12 @@ export function MapAndLotInfo({ slides }: MapAndLotInfoProps) {
           </div>
         </div>
         <div className="m5-two__mobile-text">
-          <p className="t-neue-14">
+          <p className="t-neue-14 m5-two__lake-copy">
             {capWejscie.leadBeforeKey}
             <span className="t-neue-14-bold">{capWejscie.keyBold}</span>
-            {capWejscie.leadAfterKey}
+            {capWejscie.leadAfterKey}{" "}
+            <span className="t-neue-14-bold">{capWejscie.closingBold}</span>
           </p>
-          <p className="t-neue-14-bold">{capWejscie.closingBold}</p>
         </div>
       </section>
       <SiteBasicsSection />

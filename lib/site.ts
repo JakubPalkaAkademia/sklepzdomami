@@ -23,6 +23,9 @@ export const studio = {
   nip: "8513318220",
 } as const;
 
+export const legalDisclaimer =
+  "Przedstawiona oferta ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66¹ Kodeksu Cywilnego. Powierzchnie podano według Polskiej Normy PN-ISO 9836:2015-12, bez uwzględnienia tynków. Ostateczny pomiar powierzchni zostanie określony na podstawie inwentaryzacji powykonawczej. Prezentowane w treści oferty rysunki, wizualizacje oraz mapy mają wyłącznie charakter poglądowy i ich ostateczny kształt może ulec zmianie.";
+
 export const hero = {
   /** Lake loop — seamless crossfade in hero.mp4 */
   poster: "/hero-poster.jpg",
@@ -63,6 +66,10 @@ export const investment = {
     ],
   },
   quote: "Jezioro pod ręką. Miasto w zasięgu. Dom, do którego dobrze się wraca.",
+  quoteLines: [
+    "Jezioro pod ręką. Miasto w zasięgu.",
+    "Dom, do którego dobrze się wraca.",
+  ],
   turnkeyHeading: "Dom gotowy na Twój sposób życia.",
   livingSpace: {
     lead: "Nawet",
@@ -162,9 +169,13 @@ export const investment = {
   ],
   slider: [
     { src: "/render-front.jpg", alt: "elewacja frontowa — para domów 7A i 7B" },
+    { src: "/slider-lake-pier.jpg", alt: "jezioro — pomost przy zachodzie słońca" },
     { src: "/render-para.jpg", alt: "para domów za ogrodzeniem — golden hour" },
-    { src: "/render-night.jpg", alt: "wizualizacja nocna — Szmaragdowa 7" },
-    { src: "/render-day.jpg", alt: "wizualizacja dzienna — Szmaragdowa 7" },
+    { src: "/slider-boardwalk.jpg", alt: "ścieżka drewniana między domami — wieczór" },
+    { src: "/render-night.jpg", alt: "wizualizacja nocna — Szmaragdowa 7", fit: "cover" },
+    { src: "/slider-detail-bark.jpg", alt: "detal — faktura drewna na elewacji" },
+    { src: "/render-day.jpg", alt: "wizualizacja dzienna — Szmaragdowa 7", fit: "cover" },
+    { src: "/slider-lake-shore.jpg", alt: "jezioro — brzeg i woda", fit: "cover" },
   ],
   specsTitle: "informacje",
   lotSpecs: [
@@ -172,11 +183,14 @@ export const investment = {
     { label: "status", value: "w budowie" },
     { label: "adres inwestycji", value: "ul. Szmaragdowa 7, 73-108 Morzyczyn" },
   ],
-  siteBasicsTitle: "podstawowe informacje",
+  siteBasicsTitle: "Informacje",
   siteBasics: [
-    { label: "kontakt", value: `${studio.phone} · ${studio.email}` },
-    { label: "zespół", value: "Martyna Miłowska & Jakub Palka" },
-    { label: "firma", value: site.legalName },
+    { label: "kontakt", value: "" },
+    { label: "zespół", value: "Martyna Miłowska, Jakub Palka, Jarosław Miś, Beata Johansen" },
+    {
+      label: "firma",
+      value: `${site.legalName} · KRS ${studio.krs} · NIP ${studio.nip}`,
+    },
     { label: "adres pracowni", value: `${studio.address}, ${studio.postalCode} ${studio.city}` },
   ],
 } as const;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { investment } from "@/lib/site";
+import { investment, studio } from "@/lib/site";
 
 type PanelKey = (typeof investment.siteBasics)[number]["label"];
 
@@ -47,7 +47,7 @@ export function SiteBasicsSection() {
       <h2 id="basics-title" className="m17-basics__title">{investment.siteBasicsTitle}</h2>
       <div className="m17-basics__toggle">
         <label className="m17-basics__toggle-label">
-          otwórz wszystko
+          rozwiń wszystko
           <input
             type="checkbox"
             className="m17-basics__toggle-input"
@@ -62,7 +62,20 @@ export function SiteBasicsSection() {
             <summary className="t-neue-14-bold" onClick={handleSummaryClick(item.label)}>
               {item.label}
             </summary>
-            <div className="m17-basics__content">{item.value}</div>
+            <div className="m17-basics__content">
+              {item.label === "kontakt" ? (
+                <div className="m17-basics__contact">
+                  <p>
+                    <a href={studio.phoneHref}>{studio.phone}</a>
+                  </p>
+                  <p>
+                    <a href={studio.emailHref}>{studio.email}</a>
+                  </p>
+                </div>
+              ) : (
+                item.value
+              )}
+            </div>
           </details>
         ))}
       </div>

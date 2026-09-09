@@ -89,7 +89,13 @@ export function ShelterPage() {
         style={{ "--m6-bg": "#222325", "--m6-color": "#ffffff" } as React.CSSProperties}
       >
         <div className="m6-rich__inner m6-rich__inner--coords m6-rich__inner--living-space-band">
-          <p className="m6-rich__quote-line m6-living-space__quote">{investment.quote}</p>
+          <p className="m6-rich__quote-line m6-living-space__quote">
+            {investment.quoteLines.map((line) => (
+              <span key={line} className="m6-living-space__quote-line">
+                {line}
+              </span>
+            ))}
+          </p>
           <div className="m6-rich__content m6-rich__content--coords m6-living-space">
             <div className="m6-living-space__features">
               {investment.livingSpace.features.map((feature) => (

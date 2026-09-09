@@ -13,6 +13,7 @@ const easeInOutCubic = (t: number) =>
 export type ProductStorySlide = {
   src: string;
   alt: string;
+  fit?: "contain" | "cover";
 };
 
 type ProductStorySliderProps = {
@@ -168,7 +169,12 @@ export function ProductStorySlider({ slides }: ProductStorySliderProps) {
                   <img
                     src={slide.src}
                     alt={slide.alt}
-                    className="m7-product-story__media"
+                    className={[
+                      "m7-product-story__media",
+                      slide.fit === "cover" ? "m7-product-story__media--cover" : "",
+                    ]
+                      .filter(Boolean)
+                      .join(" ")}
                     onLoad={() => markSourceLoaded(slide.src)}
                     loading={index === 0 ? "eager" : "lazy"}
                     decoding="async"

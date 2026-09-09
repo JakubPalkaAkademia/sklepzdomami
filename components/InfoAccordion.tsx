@@ -67,7 +67,7 @@ export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: Inf
     <>
       <div className="m14-info__toggle">
         <label className="m14-info__toggle-label">
-          otwórz wszystko
+          rozwiń wszystko
           <input
             type="checkbox"
             className="m14-info__toggle-input"
