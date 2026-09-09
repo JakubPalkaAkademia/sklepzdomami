@@ -1,8 +1,9 @@
 export const site = {
   name: "sklep z domami",
   legalName: "Sklep z Domami M. Miłowska, J. Palka sp.j.",
-  domain: "sklepzdomami.pl",
-  url: "https://sklepzdomami.pl",
+  legalNameFull: "Sklep z Domami M. Miłowska, J. Palka Spółka Jawna",
+  domain: "sklepzdomami.com",
+  url: "https://sklepzdomami.com",
   locale: "pl_PL",
 } as const;
 
@@ -21,7 +22,28 @@ export const studio = {
   ],
   krs: "0001126473",
   nip: "8513318220",
+  regon: "529623912",
+  court:
+    "Sąd Rejonowy Szczecin-Centrum w Szczecinie, XIII Wydział Gospodarczy Krajowego Rejestru Sądowego",
+  registeredAt: "2024-09-11",
+  representation: "każdy wspólnik ma prawo samodzielnie reprezentować spółkę",
 } as const;
+
+export const socials = [
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/profile.php?id=61575634206335",
+  },
+  {
+    label: "X",
+    href: "https://x.com/Sklepzdomami",
+  },
+] as const;
+
+export const legalPages = [
+  { href: "/polityka-prywatnosci", label: "polityka prywatności" },
+  { href: "/polityka-cookies", label: "polityka cookies" },
+] as const;
 
 export const legalDisclaimer =
   "Przedstawiona oferta ma charakter informacyjny i nie stanowi oferty handlowej w rozumieniu art. 66¹ Kodeksu Cywilnego. Powierzchnie podano według Polskiej Normy PN-ISO 9836:2015-12, bez uwzględnienia tynków. Ostateczny pomiar powierzchni zostanie określony na podstawie inwentaryzacji powykonawczej. Prezentowane w treści oferty rysunki, wizualizacje oraz mapy mają wyłącznie charakter poglądowy i ich ostateczny kształt może ulec zmianie.";
@@ -189,7 +211,7 @@ export const investment = {
     { label: "zespół", value: "Martyna Miłowska, Jakub Palka, Jarosław Miś, Beata Johansen" },
     {
       label: "firma",
-      value: `${site.legalName} · KRS ${studio.krs} · NIP ${studio.nip}`,
+      value: `${site.legalNameFull} · KRS ${studio.krs} · NIP ${studio.nip} · REGON ${studio.regon}`,
     },
     { label: "adres pracowni", value: `${studio.address}, ${studio.postalCode} ${studio.city}` },
   ],
@@ -213,7 +235,19 @@ export const pracownia = {
 export const kontakt = {
   title: "kontakt",
   intro: "Jeden adres, jeden telefon, jedna skrzynka.",
+  formTitle: "napisz do nas",
+  nameLabel: "imię i nazwisko",
+  emailLabel: "e-mail",
+  phoneLabel: "telefon (opcjonalnie)",
+  messageLabel: "wiadomość",
+  submitLabel: "wyślij wiadomość",
+  submittingLabel: "wysyłanie…",
+  formSuccess: "Dziękujemy — wiadomość została wysłana. Odpowiemy najszybciej jak to możliwe.",
+  formError: "Nie udało się wysłać wiadomości. Spróbuj ponownie lub napisz na biuro@sklepzdomami.pl.",
 } as const;
+
+export const footerCopyright =
+  "© 2026 Sklep z domami — sklepzdomami.com. Wszystkie prawa zastrzeżone.";
 
 export const booking = {
   label: "Umów wizytę",

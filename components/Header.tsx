@@ -2,13 +2,15 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { SocialLinks } from "@/components/SocialLinks";
 import { nav } from "@/lib/site";
 
 export function Header() {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [pastHero, setPastHero] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!isHome) {
@@ -19,7 +21,6 @@ export function Header() {
     const hero = document.querySelector(".m8-hero");
 
     const onScroll = () => {
-      // Switch soon after scroll starts — not after the full 100vh hero leaves the viewport.
       const scrolled = window.scrollY > 32;
       if (!hero) {
         setPastHero(scrolled);
@@ -39,10 +40,37 @@ export function Header() {
     };
   }, [isHome]);
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    document.body.classList.toggle("nav-open", menuOpen);
+    return () => {
+      document.body.classList.remove("nav-open");
+    };
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
+
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
   const headerClass = [
     "site-header",
     isHome ? "site-header--shelter" : "site-header--light",
     isHome && pastHero ? "site-header--scrolled" : "",
+    menuOpen ? "site-header--menu-open" : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -67,6 +95,7 @@ export function Header() {
           height={24}
         />
       </Link>
+
       <nav className="site-header__nav" aria-label="nawigacja">
         {nav.map((item) => (
           <Link key={item.href} href={item.href}>
@@ -74,6 +103,41 @@ export function Header() {
           </Link>
         ))}
       </nav>
+
+      <button
+        type="button"
+        className="site-header__menu-btn"
+        aria-label={menuOpen ? "Zamknij menu" : "Otwórz menu"}
+        aria-expanded={menuOpen}
+        aria-controls="site-mobile-menu"
+        onClick={() => setMenuOpen((open) => !open)}
+      >
+        <span className="site-header__menu-icon" aria-hidden="true" />
+      </button>
+
+      {menuOpen && (
+        <button
+          type="button"
+          className="site-header__backdrop"
+          aria-label="Zamknij menu"
+          onClick={closeMenu}
+        />
+      )}
+
+      <div
+        id="site-mobile-menu"
+        className={`site-header__drawer${menuOpen ? " site-header__drawer--open" : ""}`}
+        aria-hidden={!menuOpen}
+      >
+        <nav className="site-header__drawer-nav" aria-label="menu mobilne">
+          {nav.map((item) => (
+            <Link key={item.href} href={item.href} onClick={closeMenu}>
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+        <SocialLinks className="site-header__drawer-socials" />
+      </div>
     </header>
   );
 }

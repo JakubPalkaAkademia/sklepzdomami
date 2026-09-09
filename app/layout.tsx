@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
+import { CookieNotice } from "@/components/CookieNotice";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { StructuredData } from "@/components/StructuredData";
 import { hero, investment, site } from "@/lib/site";
 import "./vipp-shelter.css";
 
@@ -48,6 +50,7 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${vippSans.variable} ${vippSerif.variable}`}>
       <head>
+        <StructuredData />
         <link rel="preload" href={hero.poster} as="image" />
         <link rel="preload" href={hero.videoMp4} as="fetch" type="video/mp4" crossOrigin="anonymous" />
       </head>
@@ -55,6 +58,7 @@ export default function RootLayout({
         <Header />
         <main>{children}</main>
         <Footer />
+        <CookieNotice />
       </body>
     </html>
   );

@@ -2,6 +2,7 @@
   "name": "sklep-z-domami",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.13.1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -13,7 +14,8 @@
     "keen-slider": "^6.8.6",
     "next": "15.5.25",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "resend": "^6.27.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
