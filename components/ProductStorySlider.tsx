@@ -17,11 +17,10 @@ export type ProductStorySlide = {
 };
 
 type ProductStorySliderProps = {
-  title: string;
   slides: readonly ProductStorySlide[];
 };
 
-export function ProductStorySlider({ title, slides }: ProductStorySliderProps) {
+export function ProductStorySlider({ slides }: ProductStorySliderProps) {
   const [loadedBySrc, setLoadedBySrc] = useState<Record<string, boolean>>({});
   const [sliderReady, setSliderReady] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -98,7 +97,7 @@ export function ProductStorySlider({ title, slides }: ProductStorySliderProps) {
   }, [isLoading, currentSlide, progressKey, instanceRef]);
 
   return (
-    <section className="m7-product-story" aria-label={title}>
+    <section className="m7-product-story" aria-label="galeria zdjęć z budowy">
       <div className="m7-product-story__slider-wrapper">
         <div
           ref={sliderRef}
@@ -126,9 +125,6 @@ export function ProductStorySlider({ title, slides }: ProductStorySliderProps) {
                 </div>
                 <div className="m7-product-story__details">
                   <div className="m7-product-story__topbar-spacer" aria-hidden="true" />
-                  <div className="m7-product-story__top-title">
-                    <p>{title}</p>
-                  </div>
                 </div>
               </div>
             </div>

@@ -47,6 +47,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pl" className={`${vippSans.variable} ${vippSerif.variable}`}>
+      <head>
+        <link rel="preload" href={hero.poster} as="image" />
+        <link rel="preload" href={hero.videoMp4} as="fetch" type="video/mp4" crossOrigin="anonymous" />
+      </head>
       <body className={vippSans.className}>
         <Header />
         <main>{children}</main>

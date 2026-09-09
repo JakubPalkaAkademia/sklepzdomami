@@ -24,10 +24,11 @@ export const studio = {
 } as const;
 
 export const hero = {
-  /** Landscape render without baked-in typography — set useVideo true after replacing hero.mp4 */
-  poster: "/render-deck.jpg",
+  /** Lake loop — seamless crossfade in hero.mp4 */
+  poster: "/hero-poster.jpg",
   videoMp4: "/hero.mp4",
-  useVideo: false,
+  coverVideoMp4: "/hero-cover.mp4",
+  useVideo: true,
 } as const;
 
 /** Szmaragdowa 7 — single investment, two buildings side by side. */
@@ -40,22 +41,22 @@ export const investment = {
   address: "ul. Szmaragdowa 7, 73-108 Morzyczyn",
   locationLabel: "morzyczyn, szmaragdowa 7",
   status: "w budowie",
-  introLeadPl: "7A · 7B · szmaragdowa",
   intro:
-    "Dwa domy na jednej działce nad Miedwiem — drewno, ciemny dach, taras w osi z ogrodem. Oglądasz na budowie, nie w katalogu.",
-  statusLine: "7A / 7B · w budowie",
-  quote: {
-    line1: "Miedwie nie widać z drogi, ale jest tuż obok...",
-    line2: "Dwa domy stoją już w bryle — wchodzimy w detale.",
-    attribution: "martyna miłowska & jakub palka",
+    "Kameralna zabudowa dwóch domów bliźniaczych blisko jeziora dla osób, które chcą mieszkać spokojniej, a jednocześnie mieć wygodny dojazd do Szczecina i Stargardu.",
+  featureBlock: {
+    paragraphs: [
+      "Sklep z Domami powstał z prostego założenia: zakup domu powinien być bardziej przejrzysty.",
+      "Wybierz swój, umów wizytę online i zobacz go na miejscu. Wszystko, czego potrzebujesz, aby podjąć dobrą decyzję w jednym miejscu.",
+      "Domu nie kupuje się w pośpiechu. Można za to wybierać go prościej.",
+    ],
   },
+  quote: "Jezioro pod ręką. Miasto w zasięgu. Dom, do którego dobrze się wraca.",
   coordinatesDecimal: "53.35312° N  14.90159° E",
   coordinatesDms: "53°21'11.2\"N  14°54'05.7\"E",
   closing: {
     line1: "Szmaragdowa 7, Morzyczyn",
     line2: "7A i 7B · w budowie",
   },
-  postcardTitle: "z placu budowy",
   groundFloor: {
     label: "parter",
     total: "84,50 m²",
@@ -85,15 +86,18 @@ export const investment = {
     hero: "/render-deck.jpg",
     pair: "/render-para.jpg",
     deck: "/render-deck.jpg",
+    large: "/render-front.jpg",
     coords: "/render-para.jpg",
     entrance: "/render-wejscie.jpg",
+    day: "/render-day.jpg",
+    night: "/render-night.jpg",
   },
   sequences: [
     {
       kickerBold: "taras 7B",
       body: "Strefa dzienna wychodzi na taras. Elewacja z lameli — widok od ogrodu.",
-      image: "/render-deck.jpg",
-      alt: "widok na taras i elewację — golden hour",
+      image: "/render-garden.jpg",
+      alt: "elewacja drewniana i ogród — golden hour",
     },
     {
       kickerBold: "wejście",

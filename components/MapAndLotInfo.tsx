@@ -3,10 +3,15 @@
 import { useState } from "react";
 import { InteractiveMap } from "@/components/InteractiveMap";
 import { LotInfoSection } from "@/components/LotInfoSection";
+import { ProductStorySlider, type ProductStorySlide } from "@/components/ProductStorySlider";
 import { SiteBasicsSection } from "@/components/SiteBasicsSection";
 import { defaultLotId, type LotId } from "@/lib/mapa";
 
-export function MapAndLotInfo() {
+type MapAndLotInfoProps = {
+  slides: readonly ProductStorySlide[];
+};
+
+export function MapAndLotInfo({ slides }: MapAndLotInfoProps) {
   const [selectedLot, setSelectedLot] = useState<LotId>(defaultLotId);
   const [hoveredLot, setHoveredLot] = useState<LotId | null>(null);
 
@@ -29,6 +34,7 @@ export function MapAndLotInfo() {
       />
       <div className="m16-map-spacer" aria-hidden="true" />
       <LotInfoSection displayLot={displayLot} />
+      <ProductStorySlider slides={slides} />
       <SiteBasicsSection />
     </>
   );

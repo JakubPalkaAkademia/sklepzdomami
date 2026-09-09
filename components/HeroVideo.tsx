@@ -13,18 +13,24 @@ export function HeroVideo() {
     const video = videoRef.current;
     if (!video) return;
 
-    const onCanPlay = () => {
-      if (video.videoWidth > 0 && video.videoHeight > 0) {
-        setVideoReady(true);
-        void video.play().catch(() => setVideoReady(false));
-      }
+    const markReady = () => setVideoReady(true);
+
+    const tryPlay = () => {
+      void video.play().catch(() => {
+        // Autoplay can fail briefly; keep poster visible until a later attempt succeeds.
+      });
     };
 
-    video.addEventListener("loadeddata", onCanPlay);
-    video.addEventListener("canplay", onCanPlay);
+    video.addEventListener("playing", markReady);
+    video.addEventListener("loadeddata", tryPlay);
+    video.addEventListener("canplay", tryPlay);
+
+    tryPlay();
+
     return () => {
-      video.removeEventListener("loadeddata", onCanPlay);
-      video.removeEventListener("canplay", onCanPlay);
+      video.removeEventListener("playing", markReady);
+      video.removeEventListener("loadeddata", tryPlay);
+      video.removeEventListener("canplay", tryPlay);
     };
   }, []);
 
@@ -34,17 +40,25 @@ export function HeroVideo() {
         <video
           ref={videoRef}
           className={`m8-hero__video${videoReady ? " m8-hero__video--active" : ""}`}
+          src={hero.videoMp4}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
           poster={hero.poster}
-        >
-          <source src={hero.videoMp4} type="video/mp4" />
-        </video>
+          suppressHydrationWarning
+        />
       )}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img className="m8-hero__poster" src={hero.poster} alt="" fetchPriority="high" decoding="async" />
+      <img
+        className={`m8-hero__poster${videoReady ? " m8-hero__poster--hidden" : ""}`}
+        src={hero.poster}
+        alt=""
+        fetchPriority="high"
+        decoding="async"
+        suppressHydrationWarning
+      />
     </div>
   );
 }
