@@ -5,7 +5,9 @@ const response = await fetch(
 );
 
 console.log(`Bing ping ${response.status} ${response.statusText}`);
-if (!response.ok) {
+if (response.status === 410) {
+  console.log("Bing ping endpoint retired — use IndexNow (pnpm seo:indexnow) instead.");
+} else if (!response.ok) {
   console.error(await response.text());
   process.exit(1);
 }
