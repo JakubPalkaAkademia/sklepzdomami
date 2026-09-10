@@ -11,7 +11,9 @@
     "lint": "eslint",
     "seo:status": "node scripts/seo-status.mjs",
     "seo:indexnow": "node scripts/submit-indexnow.mjs",
-    "seo:google-dns": "node scripts/add-google-dns-verification.mjs"
+    "seo:bing": "node scripts/submit-bing-sitemap.mjs",
+    "seo:google-dns": "node scripts/add-google-dns-verification.mjs",
+    "seo:submit": "node scripts/submit-indexnow.mjs && node scripts/submit-bing-sitemap.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",
