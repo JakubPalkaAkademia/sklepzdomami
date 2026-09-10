@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { BookNow } from "@/components/BookNow";
 import { InfoAccordion } from "@/components/InfoAccordion";
-import { investment } from "@/lib/site";
+import { useDictionary } from "@/components/LocaleProvider";
+import { fillTemplate } from "@/lib/content";
 import { getLotDetails, type FloorKey } from "@/lib/lots";
 import type { LotId } from "@/lib/mapa";
 
@@ -12,9 +13,10 @@ type LotInfoSectionProps = {
 };
 
 export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
+  const dict = useDictionary();
   const [activeFloor, setActiveFloor] = useState<FloorKey>("parter");
   const [infoExpanded, setInfoExpanded] = useState(false);
-  const lot = getLotDetails(displayLot);
+  const lot = getLotDetails(displayLot, dict);
   const floor = lot?.floors[activeFloor];
 
   useEffect(() => {
@@ -24,13 +26,13 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
   return (
     <section className="m14-info" id="lot-info" aria-labelledby="info-title">
       <h2 id="info-title" className="m14-info__title m14-info__title--mobile">
-        {`${investment.specsTitle} — ${displayLot}`}
+        {`${dict.investment.specsTitle} — ${displayLot}`}
       </h2>
       <div className="m14-info__grid">
         <div className="m14-info__media m14-info__media--plan">
           {floor && lot ? (
             <>
-              <div className="m14-info__floor-toggle" role="tablist" aria-label="kondygnacja">
+              <div className="m14-info__floor-toggle" role="tablist" aria-label={dict.ui.floorAriaLabel}>
                 {(Object.keys(lot.floors) as FloorKey[]).map((key) => (
                   <button
                     key={key}
@@ -67,7 +69,7 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
             </>
           ) : (
             <p className="m14-info__hint m14-info__hint--empty t-neue-14">
-              Rzuty dla lokalu {displayLot} — wkrótce.
+              {fillTemplate(dict.ui.plansComingSoon, { lot: displayLot })}
             </p>
           )}
         </div>
@@ -75,7 +77,7 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
           className={`m14-info__panel${infoExpanded ? " m14-info__panel--expanded" : ""}`}
         >
           <h2 className="m14-info__title">
-            {`${investment.specsTitle} — ${displayLot}`}
+            {`${dict.investment.specsTitle} — ${displayLot}`}
           </h2>
           <InfoAccordion
             key={displayLot}

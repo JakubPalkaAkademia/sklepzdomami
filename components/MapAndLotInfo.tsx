@@ -6,14 +6,17 @@ import { InteractiveMap } from "@/components/InteractiveMap";
 import { LotInfoSection } from "@/components/LotInfoSection";
 import { ProductStorySlider, type ProductStorySlide } from "@/components/ProductStorySlider";
 import { SiteBasicsSection } from "@/components/SiteBasicsSection";
+import { useDictionary } from "@/components/LocaleProvider";
+import { getInvestment } from "@/lib/content";
 import { defaultLotId, type LotId } from "@/lib/mapa";
-import { investment } from "@/lib/site";
 
 type MapAndLotInfoProps = {
   slides: readonly ProductStorySlide[];
 };
 
 export function MapAndLotInfo({ slides }: MapAndLotInfoProps) {
+  const dict = useDictionary();
+  const investment = getInvestment(dict);
   const [selectedLot, setSelectedLot] = useState<LotId>(defaultLotId);
   const [hoveredLot, setHoveredLot] = useState<LotId | null>(null);
   const [capTaras, capWejscie] = investment.captions;
@@ -41,6 +44,8 @@ export function MapAndLotInfo({ slides }: MapAndLotInfoProps) {
         heading={investment.facadeBlock.heading}
         paragraphs={investment.facadeBlock.paragraphs}
         detailImages={investment.facadeBlock.detailImages}
+        largeImage={{ src: investment.sequences[0].image, alt: investment.sequences[0].alt }}
+        smallImage={{ src: investment.sequences[1].image, alt: investment.sequences[1].alt }}
       />
       <div
         className="m3-spacer"

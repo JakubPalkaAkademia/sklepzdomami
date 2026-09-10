@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useDictionary } from "@/components/LocaleProvider";
 
 type DayNightCompareProps = {
   daySrc: string;
@@ -10,6 +11,7 @@ type DayNightCompareProps = {
 };
 
 export function DayNightCompare({ daySrc, nightSrc, dayAlt, nightAlt }: DayNightCompareProps) {
+  const dict = useDictionary();
   const rootRef = useRef<HTMLDivElement>(null);
   const [position, setPosition] = useState(50);
   const draggingRef = useRef(false);
@@ -51,7 +53,7 @@ export function DayNightCompare({ daySrc, nightSrc, dayAlt, nightAlt }: DayNight
   };
 
   return (
-    <section className="day-night-compare" aria-label="porównanie wizualizacji dzień i noc">
+    <section className="day-night-compare" aria-label={dict.ui.dayNightCompare}>
       <div
         ref={rootRef}
         className="day-night-compare__frame"

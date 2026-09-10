@@ -1,9 +1,12 @@
+import type { Dictionary } from "@/lib/i18n";
+
 export type ContactFormPayload = {
   name: string;
   email: string;
   phone?: string;
   message: string;
   website?: string;
+  locale?: string;
 };
 
 export type ContactFormResult =
@@ -12,9 +15,12 @@ export type ContactFormResult =
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export function validateContactForm(payload: ContactFormPayload): ContactFormResult {
+export function validateContactForm(
+  payload: ContactFormPayload,
+  errors: Dictionary["contact"]["errors"],
+): ContactFormResult {
   if (payload.website?.trim()) {
-    return { ok: false, error: "Nie udało się wysłać wiadomości." };
+    return { ok: false, error: errors.generic };
   }
 
   const name = payload.name.trim();
@@ -23,19 +29,19 @@ export function validateContactForm(payload: ContactFormPayload): ContactFormRes
   const message = payload.message.trim();
 
   if (name.length < 2 || name.length > 120) {
-    return { ok: false, error: "Podaj imię i nazwisko (min. 2 znaki)." };
+    return { ok: false, error: errors.name };
   }
 
   if (!EMAIL_PATTERN.test(email) || email.length > 254) {
-    return { ok: false, error: "Podaj poprawny adres e-mail." };
+    return { ok: false, error: errors.email };
   }
 
   if (phone.length > 30) {
-    return { ok: false, error: "Numer telefonu jest zbyt długi." };
+    return { ok: false, error: errors.phone };
   }
 
   if (message.length < 10 || message.length > 4000) {
-    return { ok: false, error: "Wiadomość powinna mieć od 10 do 4000 znaków." };
+    return { ok: false, error: errors.message };
   }
 
   return { ok: true };

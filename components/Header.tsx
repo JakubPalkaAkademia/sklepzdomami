@@ -1,14 +1,17 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { LocaleLink } from "@/components/LocaleLink";
+import { useDictionary } from "@/components/LocaleProvider";
 import { SocialLinks } from "@/components/SocialLinks";
-import { nav } from "@/lib/site";
+import { isHomePath } from "@/lib/i18n/paths";
 
 export function Header() {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const dict = useDictionary();
+  const isHome = isHomePath(pathname);
   const [pastHero, setPastHero] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -77,7 +80,7 @@ export function Header() {
 
   return (
     <header className={headerClass}>
-      <Link href="/" className="site-header__logo" aria-label="sklep z domami">
+      <LocaleLink href="/" className="site-header__logo" aria-label={dict.nav.homeAriaLabel}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           className="site-header__logo-img site-header__logo-img--light"
@@ -94,32 +97,34 @@ export function Header() {
           width={148}
           height={24}
         />
-      </Link>
+      </LocaleLink>
 
-      <nav className="site-header__nav" aria-label="nawigacja">
-        {nav.map((item) => (
-          <Link key={item.href} href={item.href}>
-            {item.label}
-          </Link>
-        ))}
-      </nav>
-
-      <button
-        type="button"
-        className="site-header__menu-btn"
-        aria-label={menuOpen ? "Zamknij menu" : "Otwórz menu"}
-        aria-expanded={menuOpen}
-        aria-controls="site-mobile-menu"
-        onClick={() => setMenuOpen((open) => !open)}
-      >
-        <span className="site-header__menu-icon" aria-hidden="true" />
-      </button>
+      <div className="site-header__end">
+        <nav className="site-header__nav" aria-label={dict.nav.ariaLabel}>
+          {dict.nav.items.map((item) => (
+            <LocaleLink key={item.href} href={item.href}>
+              {item.label}
+            </LocaleLink>
+          ))}
+        </nav>
+        <LanguageSwitcher />
+        <button
+          type="button"
+          className="site-header__menu-btn"
+          aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
+          aria-expanded={menuOpen}
+          aria-controls="site-mobile-menu"
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          <span className="site-header__menu-icon" aria-hidden="true" />
+        </button>
+      </div>
 
       {menuOpen && (
         <button
           type="button"
           className="site-header__backdrop"
-          aria-label="Zamknij menu"
+          aria-label={dict.nav.closeMenu}
           onClick={closeMenu}
         />
       )}
@@ -129,13 +134,14 @@ export function Header() {
         className={`site-header__drawer${menuOpen ? " site-header__drawer--open" : ""}`}
         aria-hidden={!menuOpen}
       >
-        <nav className="site-header__drawer-nav" aria-label="menu mobilne">
-          {nav.map((item) => (
-            <Link key={item.href} href={item.href} onClick={closeMenu}>
+        <nav className="site-header__drawer-nav" aria-label={dict.nav.mobileAriaLabel}>
+          {dict.nav.items.map((item) => (
+            <LocaleLink key={item.href} href={item.href} onClick={closeMenu}>
               {item.label}
-            </Link>
+            </LocaleLink>
           ))}
         </nav>
+        <LanguageSwitcher />
         <SocialLinks className="site-header__drawer-socials" />
       </div>
     </header>

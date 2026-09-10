@@ -1,21 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import { investment, studio } from "@/lib/site";
+import { useDictionary } from "@/components/LocaleProvider";
+import { studio } from "@/lib/site";
 
-type PanelKey = (typeof investment.siteBasics)[number]["label"];
+type PanelKey = string;
 
 function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<PanelKey, boolean>> {
   return Object.fromEntries(
     allKeys.filter((key) => key !== closedKey).map((key) => [key, true]),
-  ) as Partial<Record<PanelKey, boolean>>;
+  );
 }
 
 export function SiteBasicsSection() {
+  const dict = useDictionary();
+  const items = dict.investment.siteBasics;
   const [openAll, setOpenAll] = useState(false);
   const [openPanels, setOpenPanels] = useState<Partial<Record<PanelKey, boolean>>>({});
 
-  const allPanelKeys = investment.siteBasics.map((item) => item.label);
+  const allPanelKeys = items.map((item) => item.id);
   const isPanelOpen = (key: PanelKey) => openAll || Boolean(openPanels[key]);
 
   const handleOpenAll = (checked: boolean) => {
@@ -44,10 +47,10 @@ export function SiteBasicsSection() {
 
   return (
     <section className="m17-basics" aria-labelledby="basics-title">
-      <h2 id="basics-title" className="m17-basics__title">{investment.siteBasicsTitle}</h2>
+      <h2 id="basics-title" className="m17-basics__title">{dict.investment.siteBasicsTitle}</h2>
       <div className="m17-basics__toggle">
         <label className="m17-basics__toggle-label">
-          rozwiń wszystko
+          {dict.ui.expandAll}
           <input
             type="checkbox"
             className="m17-basics__toggle-input"
@@ -57,13 +60,13 @@ export function SiteBasicsSection() {
         </label>
       </div>
       <div className="m17-basics__accordion">
-        {investment.siteBasics.map((item) => (
-          <details key={item.label} open={isPanelOpen(item.label)}>
-            <summary className="t-neue-14-bold" onClick={handleSummaryClick(item.label)}>
+        {items.map((item) => (
+          <details key={item.id} open={isPanelOpen(item.id)}>
+            <summary className="t-neue-14-bold" onClick={handleSummaryClick(item.id)}>
               {item.label}
             </summary>
             <div className="m17-basics__content">
-              {item.label === "kontakt" ? (
+              {item.id === "contact" ? (
                 <div className="m17-basics__contact">
                   <p>
                     <a href={studio.phoneHref}>{studio.phone}</a>
@@ -73,7 +76,7 @@ export function SiteBasicsSection() {
                   </p>
                 </div>
               ) : (
-                item.value
+                "value" in item ? item.value : null
               )}
             </div>
           </details>

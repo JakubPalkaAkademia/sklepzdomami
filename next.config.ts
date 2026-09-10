@@ -2,7 +2,10 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   async redirects() {
-    return [{ source: "/pracownia", destination: "/o-nas", permanent: true }];
+    return [
+      { source: "/pracownia", destination: "/o-nas", permanent: true },
+      { source: "/:locale(en|de)/pracownia", destination: "/:locale/o-nas", permanent: true },
+    ];
   },
 };
 

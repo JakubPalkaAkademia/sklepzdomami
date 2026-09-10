@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Newsreader } from "next/font/google";
-import { CookieNotice } from "@/components/CookieNotice";
-import { Footer } from "@/components/Footer";
-import { Header } from "@/components/Header";
+import { headers } from "next/headers";
 import { StructuredData } from "@/components/StructuredData";
-import { hero, investment, site } from "@/lib/site";
+import { defaultLocale, isLocale } from "@/lib/i18n/config";
+import { hero } from "@/lib/site";
 import "./vipp-shelter.css";
 
 const vippSans = Inter({
@@ -23,42 +22,27 @@ const vippSerif = Newsreader({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
-  title: {
-    default: `${investment.title} · ${site.name}`,
-    template: `%s · ${site.name}`,
-  },
-  description: investment.intro,
-  openGraph: {
-    type: "website",
-    locale: "pl_PL",
-    url: site.url,
-    siteName: site.name,
-    title: `${investment.title} · ${site.name}`,
-    description: investment.tagline,
-    images: [{ url: hero.poster, width: 1500, height: 500, alt: investment.title }],
-  },
   icons: {
     icon: "/logo-icon.png",
     apple: "/logo-icon.png",
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const headerLocale = (await headers()).get("x-locale") ?? defaultLocale;
+  const locale = isLocale(headerLocale) ? headerLocale : defaultLocale;
+
   return (
-    <html lang="pl" className={`${vippSans.variable} ${vippSerif.variable}`}>
+    <html lang={locale} className={`${vippSans.variable} ${vippSerif.variable}`}>
       <head>
         <StructuredData />
         <link rel="preload" href={hero.poster} as="image" />
         <link rel="preload" href={hero.videoMp4} as="fetch" type="video/mp4" crossOrigin="anonymous" />
       </head>
       <body className={vippSans.className}>
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <CookieNotice />
+        {children}
       </body>
     </html>
   );

@@ -3,6 +3,7 @@
 import { useKeenSlider } from "keen-slider/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import "keen-slider/keen-slider.min.css";
+import { useDictionary } from "@/components/LocaleProvider";
 
 const AUTOPLAY_MS = 4000;
 const TRANSITION_DURATION_MS = 1000;
@@ -21,6 +22,7 @@ type ProductStorySliderProps = {
 };
 
 export function ProductStorySlider({ slides }: ProductStorySliderProps) {
+  const dict = useDictionary();
   const sectionRef = useRef<HTMLElement>(null);
   const [loadedBySrc, setLoadedBySrc] = useState<Record<string, boolean>>({});
   const [sliderReady, setSliderReady] = useState(false);
@@ -147,7 +149,7 @@ export function ProductStorySlider({ slides }: ProductStorySliderProps) {
     <section
       ref={sectionRef}
       className="m7-product-story"
-      aria-label="galeria zdjęć z budowy"
+      aria-label={dict.ui.gallery}
     >
       <div className="m7-product-story__slider-wrapper">
         <div

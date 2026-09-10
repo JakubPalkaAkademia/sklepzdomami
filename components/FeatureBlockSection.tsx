@@ -1,5 +1,4 @@
 import { DetailImageRotator } from "@/components/DetailImageRotator";
-import { investment } from "@/lib/site";
 
 type DetailImage = {
   src: string;
@@ -9,20 +8,21 @@ type DetailImage = {
 type FeatureBlockSectionProps = {
   priority?: boolean;
   heading?: string;
-  paragraphs?: readonly string[];
+  paragraphs: readonly string[];
+  largeImage: DetailImage;
+  smallImage?: DetailImage;
   detailImages?: readonly DetailImage[];
 };
 
 export function FeatureBlockSection({
   priority = false,
   heading,
-  paragraphs = investment.featureBlock.paragraphs,
+  paragraphs,
+  largeImage,
+  smallImage,
   detailImages,
 }: FeatureBlockSectionProps) {
-  const largeSlide = investment.sequences.find((seq) => seq.image === "/render-garden.jpg");
-  const smallSlide = investment.sequences.find((seq) => seq.image === "/render-street.jpg");
-
-  if (!largeSlide || (!smallSlide && !detailImages?.length)) {
+  if (!detailImages?.length && !smallImage) {
     return null;
   }
 
@@ -37,8 +37,8 @@ export function FeatureBlockSection({
         <div className="m5-two__large">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src={largeSlide.image}
-            alt={largeSlide.alt}
+            src={largeImage.src}
+            alt={largeImage.alt}
             width={1200}
             height={1640}
             loading={priority ? "eager" : "lazy"}
@@ -49,9 +49,9 @@ export function FeatureBlockSection({
             {detailImages?.length ? (
               <DetailImageRotator images={detailImages} />
             ) : (
-              smallSlide && (
+              smallImage && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={smallSlide.image} alt={smallSlide.alt} width={800} height={1000} loading="lazy" />
+                <img src={smallImage.src} alt={smallImage.alt} width={800} height={1000} loading="lazy" />
               )
             )}
           </div>

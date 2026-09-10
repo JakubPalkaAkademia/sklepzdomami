@@ -1,5 +1,6 @@
 "use client";
 
+import { useDictionary } from "@/components/LocaleProvider";
 import { mapLots, mapSection, mapViewBox, type LotId, type PdfRect } from "@/lib/mapa";
 
 type InteractiveMapProps = {
@@ -25,6 +26,7 @@ export function InteractiveMap({
   onHoverLot,
   onSelectLot,
 }: InteractiveMapProps) {
+  const dict = useDictionary();
   const previewLayer = hoveredLot
     ? mapLots.find((lot) => lot.id === hoveredLot)?.layerImage
     : null;
@@ -32,8 +34,8 @@ export function InteractiveMap({
   return (
     <section className="m16-map" aria-labelledby="map-title" aria-describedby="map-subtitle">
       <div className="m16-map__header">
-        <h2 id="map-title" className="m16-map__title">{mapSection.title}</h2>
-        <p id="map-subtitle" className="m16-map__subtitle">{mapSection.subtitle}</p>
+        <h2 id="map-title" className="m16-map__title">{dict.map.title}</h2>
+        <p id="map-subtitle" className="m16-map__subtitle">{dict.map.subtitle}</p>
       </div>
 
       <div className="m16-map__stage">
@@ -41,7 +43,7 @@ export function InteractiveMap({
         <img
           className="m16-map__image"
           src={mapSection.image}
-          alt={mapSection.imageAlt}
+          alt={dict.map.imageAlt}
           width={mapSection.imageWidth}
           height={mapSection.imageHeight}
           loading="lazy"
@@ -85,7 +87,7 @@ export function InteractiveMap({
         </svg>
       </div>
 
-      <div className="m16-map__buttons" role="group" aria-label="lokale na mapie">
+      <div className="m16-map__buttons" role="group" aria-label={dict.ui.mapLotsAria}>
         {mapLots.map((lot) => {
           const isSelected = selectedLot === lot.id;
           const isPreview = hoveredLot === lot.id;

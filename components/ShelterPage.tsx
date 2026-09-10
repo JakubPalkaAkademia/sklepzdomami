@@ -4,7 +4,8 @@ import { StickyBookNow } from "@/components/StickyBookNow";
 import { CoverVideo } from "@/components/CoverVideo";
 import { DayNightCompare } from "@/components/DayNightCompare";
 import { HeroSection } from "@/components/HeroSection";
-import { investment } from "@/lib/site";
+import type { Dictionary } from "@/lib/i18n";
+import { getInvestment } from "@/lib/content";
 
 function Spacer({ height = "10vh", bg = "#222325" }: { height?: string; bg?: string }) {
   return (
@@ -21,7 +22,8 @@ function splitDmsCoordinates(dms: string): [string, string] {
   return [match[1], match[2]];
 }
 
-export function ShelterPage() {
+export function ShelterPage({ dict }: { dict: Dictionary }) {
+  const investment = getInvestment(dict);
   const [, , seqC] = investment.sequences;
   const [coordsLat, coordsLon] = splitDmsCoordinates(investment.coordinatesDms);
 
@@ -44,7 +46,12 @@ export function ShelterPage() {
 
       <Spacer height="10vh" />
 
-      <FeatureBlockSection priority />
+      <FeatureBlockSection
+        priority
+        paragraphs={investment.featureBlock.paragraphs}
+        largeImage={{ src: investment.sequences[0].image, alt: investment.sequences[0].alt }}
+        smallImage={{ src: investment.sequences[1].image, alt: investment.sequences[1].alt }}
+      />
 
       <Spacer height="5vh" bg="#222325" />
 
@@ -54,7 +61,7 @@ export function ShelterPage() {
 
       <section
         className="m6-rich m6-living-space__headline-band"
-        aria-label="powierzchnia domu — nagłówek"
+        aria-label={dict.ui.livingSpaceHeadline}
         style={{ "--m6-bg": "#222325", "--m6-color": "#ffffff" } as React.CSSProperties}
       >
         <div className="m6-rich__inner">
@@ -74,7 +81,7 @@ export function ShelterPage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={investment.media.large}
-              alt="widok na inwestycję od podjazdu — Szmaragdowa 7"
+              alt={dict.ui.driveViewAlt}
               width={1024}
               height={576}
               loading="lazy"
@@ -85,7 +92,7 @@ export function ShelterPage() {
 
       <section
         className="m6-rich m6-rich--coords m6-rich--living-space"
-        aria-label="powierzchnia domu"
+        aria-label={dict.ui.livingSpace}
         style={{ "--m6-bg": "#222325", "--m6-color": "#ffffff" } as React.CSSProperties}
       >
         <div className="m6-rich__inner m6-rich__inner--coords m6-rich__inner--living-space-band">
@@ -144,7 +151,7 @@ export function ShelterPage() {
 
       <section
         className="m6-rich m6-rich--coords"
-        aria-label="współrzędne inwestycji"
+        aria-label={dict.ui.coordinates}
         style={{ "--m6-bg": "#222325", "--m6-color": "#ffffff" } as React.CSSProperties}
       >
         <div className="m6-rich__inner m6-rich__inner--coords">
@@ -163,8 +170,8 @@ export function ShelterPage() {
       <DayNightCompare
         daySrc={investment.media.day}
         nightSrc={investment.media.night}
-        dayAlt="wizualizacja dzienna — Szmaragdowa 7"
-        nightAlt="wizualizacja nocna — Szmaragdowa 7"
+        dayAlt={dict.ui.dayAlt}
+        nightAlt={dict.ui.nightAlt}
       />
 
       <Spacer height="10vh" bg="#222325" />

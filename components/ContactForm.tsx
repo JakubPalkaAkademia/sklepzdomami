@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { kontakt } from "@/lib/site";
+import { useDictionary, useLocale } from "@/components/LocaleProvider";
 
 type FormState = "idle" | "submitting" | "success" | "error";
 
 export function ContactForm() {
+  const dict = useDictionary();
+  const locale = useLocale();
+  const contact = dict.contact;
   const [state, setState] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -27,6 +30,7 @@ export function ContactForm() {
           phone: formData.get("phone"),
           message: formData.get("message"),
           website: formData.get("website"),
+          locale,
         }),
       });
 
@@ -34,7 +38,7 @@ export function ContactForm() {
 
       if (!response.ok || !result.ok) {
         setState("error");
-        setErrorMessage(result.error ?? kontakt.formError);
+        setErrorMessage(result.error ?? contact.formError);
         return;
       }
 
@@ -42,14 +46,14 @@ export function ContactForm() {
       form.reset();
     } catch {
       setState("error");
-      setErrorMessage(kontakt.formError);
+      setErrorMessage(contact.formError);
     }
   };
 
   return (
     <form className="contact-form" onSubmit={handleSubmit} noValidate>
       <div className="contact-form__field">
-        <label className="contact-form__label" htmlFor="contact-name">{kontakt.nameLabel}</label>
+        <label className="contact-form__label" htmlFor="contact-name">{contact.nameLabel}</label>
         <input
           id="contact-name"
           name="name"
@@ -62,7 +66,7 @@ export function ContactForm() {
       </div>
 
       <div className="contact-form__field">
-        <label className="contact-form__label" htmlFor="contact-email">{kontakt.emailLabel}</label>
+        <label className="contact-form__label" htmlFor="contact-email">{contact.emailLabel}</label>
         <input
           id="contact-email"
           name="email"
@@ -75,7 +79,7 @@ export function ContactForm() {
       </div>
 
       <div className="contact-form__field">
-        <label className="contact-form__label" htmlFor="contact-phone">{kontakt.phoneLabel}</label>
+        <label className="contact-form__label" htmlFor="contact-phone">{contact.phoneLabel}</label>
         <input
           id="contact-phone"
           name="phone"
@@ -87,7 +91,7 @@ export function ContactForm() {
       </div>
 
       <div className="contact-form__field">
-        <label className="contact-form__label" htmlFor="contact-message">{kontakt.messageLabel}</label>
+        <label className="contact-form__label" htmlFor="contact-message">{contact.messageLabel}</label>
         <textarea
           id="contact-message"
           name="message"
@@ -104,12 +108,12 @@ export function ContactForm() {
       </div>
 
       <button type="submit" className="contact-form__submit" disabled={state === "submitting"}>
-        {state === "submitting" ? kontakt.submittingLabel : kontakt.submitLabel}
+        {state === "submitting" ? contact.submittingLabel : contact.submitLabel}
       </button>
 
       {state === "success" && (
         <p className="contact-form__status contact-form__status--success" role="status">
-          {kontakt.formSuccess}
+          {contact.formSuccess}
         </p>
       )}
 

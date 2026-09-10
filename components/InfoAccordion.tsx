@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useDictionary } from "@/components/LocaleProvider";
+import { getInvestment } from "@/lib/content";
 import { getBuildingTotalM2, type FloorPlan } from "@/lib/lots";
-import { investment } from "@/lib/site";
 
-type PanelKey = "ground" | "upper" | (typeof investment.lotSpecs)[number]["label"];
+type PanelKey = "ground" | "upper" | string;
 
 type InfoAccordionProps = {
   groundFloor?: FloorPlan;
@@ -12,21 +13,19 @@ type InfoAccordionProps = {
   onExpandedChange?: (expanded: boolean) => void;
 };
 
-function buildPanelKeys(): PanelKey[] {
-  return ["ground", "upper", ...investment.lotSpecs.map((spec) => spec.label)];
-}
-
 function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<PanelKey, boolean>> {
   return Object.fromEntries(
     allKeys.filter((key) => key !== closedKey).map((key) => [key, true]),
-  ) as Partial<Record<PanelKey, boolean>>;
+  );
 }
 
 export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: InfoAccordionProps) {
+  const dict = useDictionary();
+  const investment = getInvestment(dict);
   const [openAll, setOpenAll] = useState(false);
   const [openPanels, setOpenPanels] = useState<Partial<Record<PanelKey, boolean>>>({});
 
-  const allPanelKeys = buildPanelKeys();
+  const allPanelKeys: PanelKey[] = ["ground", "upper", ...investment.lotSpecs.map((spec) => spec.id)];
   const isExpanded = openAll || allPanelKeys.some((key) => Boolean(openPanels[key]));
 
   useEffect(() => {
@@ -67,7 +66,7 @@ export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: Inf
     <>
       <div className="m14-info__toggle">
         <label className="m14-info__toggle-label">
-          rozwiń wszystko
+          {dict.ui.expandAll}
           <input
             type="checkbox"
             className="m14-info__toggle-input"
@@ -88,7 +87,7 @@ export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: Inf
                 <span>{room.area}</span>
               </div>
             ))}
-            <p className="m14-info__total">razem: {ground.total}</p>
+            <p className="m14-info__total">{dict.ui.total}: {ground.total}</p>
           </div>
         </details>
         <details open={isPanelOpen("upper")}>
@@ -102,15 +101,15 @@ export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: Inf
                 <span>{room.area}</span>
               </div>
             ))}
-            <p className="m14-info__total">razem: {upper.total}</p>
+            <p className="m14-info__total">{dict.ui.total}: {upper.total}</p>
             {buildingTotal && (
-              <p className="m14-info__total">powierzchnia całkowita: {buildingTotal}</p>
+              <p className="m14-info__total">{dict.ui.buildingTotal}: {buildingTotal}</p>
             )}
           </div>
         </details>
         {investment.lotSpecs.map((spec) => (
-          <details key={spec.label} open={isPanelOpen(spec.label)}>
-            <summary className="t-neue-14-bold" onClick={handleSummaryClick(spec.label)}>
+          <details key={spec.id} open={isPanelOpen(spec.id)}>
+            <summary className="t-neue-14-bold" onClick={handleSummaryClick(spec.id)}>
               {spec.label}
             </summary>
             <div className="m14-info__content">{spec.value}</div>

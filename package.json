@@ -11,6 +11,8 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.1.0",
+    "googleapis": "^178.1.1",
     "keen-slider": "^6.8.6",
     "next": "15.5.25",
     "react": "19.1.0",

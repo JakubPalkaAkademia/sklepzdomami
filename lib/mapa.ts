@@ -70,10 +70,7 @@ export const mapLots: MapLot[] = [
 ];
 
 export const mapSection = {
-  title: "Mapa inwestycji",
-  subtitle: "wybierz jeden z czterech domów.",
   image: "/mapa/mapa-base.png",
-  imageAlt: "mapa działki Szmaragdowa 7 — najechanie na lokal odsłania jego warstwę",
   imageWidth: mapImageSize.width,
   imageHeight: mapImageSize.height,
 } as const;

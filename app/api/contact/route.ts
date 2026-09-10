@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 import { escapeHtml, validateContactForm, type ContactFormPayload } from "@/lib/contact-form";
+import { getDictionary } from "@/lib/i18n";
 import { site, studio } from "@/lib/site";
 
 export async function POST(request: Request) {
@@ -8,10 +9,14 @@ export async function POST(request: Request) {
   try {
     payload = (await request.json()) as ContactFormPayload;
   } catch {
-    return Response.json({ ok: false, error: "Nieprawidłowe dane formularza." }, { status: 400 });
+    return Response.json(
+      { ok: false, error: getDictionary("pl").contact.errors.invalidPayload },
+      { status: 400 },
+    );
   }
 
-  const validation = validateContactForm(payload);
+  const dict = getDictionary(payload.locale ?? "pl");
+  const validation = validateContactForm(payload, dict.contact.errors);
   if (!validation.ok) {
     return Response.json({ ok: false, error: validation.error }, { status: 400 });
   }
@@ -23,7 +28,7 @@ export async function POST(request: Request) {
   if (!apiKey) {
     console.error("RESEND_API_KEY is not configured");
     return Response.json(
-      { ok: false, error: "Formularz kontaktowy jest chwilowo niedostępny. Napisz na biuro@sklepzdomami.pl." },
+      { ok: false, error: dict.contact.errors.unavailable },
       { status: 503 },
     );
   }
@@ -51,7 +56,7 @@ export async function POST(request: Request) {
   if (error) {
     console.error("Resend error:", error.message);
     return Response.json(
-      { ok: false, error: "Nie udało się wysłać wiadomości. Spróbuj ponownie lub napisz bezpośrednio na biuro@sklepzdomami.pl." },
+      { ok: false, error: dict.contact.errors.sendFailed },
       { status: 502 },
     );
   }

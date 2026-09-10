@@ -271,6 +271,13 @@ button {
   display: block;
 }
 
+.site-header__end {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  pointer-events: auto;
+}
+
 .site-header__nav {
   display: flex;
   gap: 1.5rem;
@@ -279,6 +286,41 @@ button {
   font-size: 12px;
   letter-spacing: 0.04em;
   text-transform: lowercase;
+}
+
+.lang-switcher {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-header);
+  font-weight: 300;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.lang-switcher__link {
+  opacity: 0.42;
+  text-decoration: none;
+  padding: 0.15rem 0.1rem;
+  transition: opacity 0.2s ease;
+}
+
+.lang-switcher__link:hover,
+.lang-switcher__link:focus-visible {
+  opacity: 1;
+}
+
+.lang-switcher__link--active {
+  opacity: 1;
+  font-weight: 500;
+}
+
+.site-header__end .lang-switcher {
+  margin-left: 0.25rem;
+  padding-left: 1.25rem;
+  border-left: 1px solid currentColor;
+  opacity: 0.85;
 }
 
 .site-header__menu-btn {
@@ -347,6 +389,21 @@ button {
 }
 
 @media screen and (max-width: 834px) {
+  .site-header__end {
+    gap: 0.4rem;
+  }
+
+  .site-header__end .lang-switcher {
+    display: none;
+  }
+
+  .site-header__drawer .lang-switcher {
+    font-size: 14px;
+    gap: 1rem;
+    padding-top: 0.25rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
   .site-header__nav {
     display: none;
   }
@@ -2170,7 +2227,7 @@ html.booking-open body {
 .book-overlay {
   position: fixed;
   inset: 0;
-  z-index: 2000;
+  z-index: 3000;
   display: flex;
   justify-content: flex-end;
   background: rgba(0, 0, 0, 0.5);
@@ -2307,6 +2364,12 @@ html.booking-open body {
   cursor: not-allowed;
 }
 
+.book-calendar__cell--booked {
+  background: #e8e4dc;
+  color: rgba(0, 0, 0, 0.35);
+  cursor: not-allowed;
+}
+
 .book-calendar__cell--selected {
   background: #3d6b56;
   color: #fff;
@@ -2323,6 +2386,11 @@ html.booking-open body {
 
 .book-calendar__legend-item--available {
   background: #c2dfd0;
+  padding: 2px 8px;
+}
+
+.book-calendar__legend-item--booked {
+  background: #e8e4dc;
   padding: 2px 8px;
 }
 
@@ -2349,6 +2417,11 @@ html.booking-open body {
   background: var(--vipp-black);
   color: #fff;
   border-color: var(--vipp-black);
+}
+
+.book-times__slot--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
 }
 
 .book-panel__footer {
@@ -2390,7 +2463,129 @@ html.booking-open body {
   font-size: 14px;
 }
 
-@media screen and (max-width: 720px) {
+.book-panel__steps {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem 0;
+  font-size: 12px;
+  text-transform: lowercase;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.book-panel__step--active {
+  color: var(--vipp-black);
+  font-weight: 500;
+}
+
+.book-panel__loading {
+  margin-bottom: 0.75rem;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.book-panel__summary {
+  margin-bottom: 1rem;
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.book-panel__form {
+  display: grid;
+  gap: 1rem;
+}
+
+.book-form__field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.book-form__label {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: lowercase;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.book-form__input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+}
+
+.book-form__honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.book-panel__error {
+  font-size: 13px;
+  color: #8b2e2e;
+}
+
+.book-panel__footer--inline {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0.75rem;
+  padding: 0;
+  border-top: none;
+}
+
+.book-panel__back {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: transparent;
+}
+
+.book-panel__success {
+  display: grid;
+  gap: 1rem;
+}
+
+.book-panel__success-message {
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.book-panel__success-hint {
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.45);
+  text-transform: lowercase;
+}
+
+.book-panel__calendar-actions {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.book-panel__calendar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  text-align: center;
+  border: 1px solid var(--vipp-black);
+}
+
+.book-panel__calendar-btn--google {
+  background: #fff;
+  color: var(--vipp-black);
+}
+
+.book-panel__calendar-btn--apple {
+  background: var(--vipp-black);
+  color: #fff;
+}
+
+@media screen and (max-width: 834px) {
   .book-calendar__months {
     grid-template-columns: 1fr;
   }
@@ -2401,8 +2596,19 @@ html.booking-open body {
 
   .book-panel {
     width: 100%;
-    max-height: 92svh;
+    max-height: min(100dvh, 100svh);
+    border-radius: 12px 12px 0 0;
+    animation: book-panel-up 0.28s ease;
   }
+
+  .book-panel__footer {
+    padding-bottom: calc(1.75rem + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@keyframes book-panel-up {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 /* —— thin pages —— */

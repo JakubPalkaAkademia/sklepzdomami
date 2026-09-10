@@ -1,4 +1,7 @@
 import type { LotId } from "@/lib/mapa";
+import type { RoomKey } from "@/lib/site";
+import type { Dictionary } from "@/lib/i18n";
+import { fillTemplate } from "@/lib/content";
 
 export type FloorRoom = {
   name: string;
@@ -26,49 +29,76 @@ export type LotDetails = {
 
 export type FloorKey = keyof LotDetails["floors"];
 
-export const lotDetails: Partial<Record<LotId, LotDetails>> = {
+type RawFloor = {
+  image: string;
+  imageWidth: number;
+  imageHeight: number;
+  total: string;
+  rooms: { key: RoomKey; area: string }[];
+};
+
+const lotAssets: Partial<Record<LotId, { parter: RawFloor; pietro: RawFloor }>> = {
   "7A": {
-    id: "7A",
-    title: "7A",
-    floors: {
-      parter: {
-        label: "parter",
-        image: "/loty/7A/parter.png",
-        imageWidth: 4045,
-        imageHeight: 3255,
-        imageAlt: "rzut parteru — lokal 7A, Szmaragdowa 7",
-        total: "93,00 m²",
-        rooms: [
-          { name: "przedsionek", area: "4,00 m²" },
-          { name: "strefa dzienna z kuchnią", area: "62,00 m²" },
-          { name: "pom. biurowe", area: "13,80 m²" },
-          { name: "łazienka", area: "4,20 m²" },
-          { name: "pom. techniczne", area: "4,00 m²" },
-          { name: "spiżarnia", area: "5,00 m²" },
-        ],
-      },
-      pietro: {
-        label: "piętro",
-        image: "/loty/7A/pietro.png",
-        imageWidth: 4045,
-        imageHeight: 3255,
-        imageAlt: "rzut piętra — lokal 7A, Szmaragdowa 7",
-        total: "77,25 m²",
-        rooms: [
-          { name: "sypialnia 1", area: "11,70 m²" },
-          { name: "sypialnia 2", area: "20,70 m²" },
-          { name: "sypialnia 3", area: "22,45 m²" },
-          { name: "łazienka", area: "9,30 m²" },
-          { name: "pralnia", area: "4,40 m²" },
-          { name: "hol", area: "8,70 m²" },
-        ],
-      },
+    parter: {
+      image: "/loty/7A/parter.png",
+      imageWidth: 4045,
+      imageHeight: 3255,
+      total: "93,00 m²",
+      rooms: [
+        { key: "vestibule", area: "4,00 m²" },
+        { key: "livingKitchen", area: "62,00 m²" },
+        { key: "office", area: "13,80 m²" },
+        { key: "bathroom", area: "4,20 m²" },
+        { key: "technical", area: "4,00 m²" },
+        { key: "pantry", area: "5,00 m²" },
+      ],
+    },
+    pietro: {
+      image: "/loty/7A/pietro.png",
+      imageWidth: 4045,
+      imageHeight: 3255,
+      total: "77,25 m²",
+      rooms: [
+        { key: "bedroom1", area: "11,70 m²" },
+        { key: "bedroom2", area: "20,70 m²" },
+        { key: "bedroom3", area: "22,45 m²" },
+        { key: "bathroom", area: "9,30 m²" },
+        { key: "laundry", area: "4,40 m²" },
+        { key: "hall", area: "8,70 m²" },
+      ],
     },
   },
 };
 
-export function getLotDetails(id: LotId): LotDetails | undefined {
-  return lotDetails[id];
+export function getLotDetails(id: LotId, dict: Dictionary): LotDetails | undefined {
+  const assets = lotAssets[id];
+  if (!assets) {
+    return undefined;
+  }
+
+  const localizeFloor = (floor: RawFloor, kind: "ground" | "upper"): FloorPlan => ({
+    label: kind === "ground" ? dict.floors.ground : dict.floors.upper,
+    image: floor.image,
+    imageWidth: floor.imageWidth,
+    imageHeight: floor.imageHeight,
+    imageAlt: fillTemplate(kind === "ground" ? dict.floors.groundPlanAlt : dict.floors.upperPlanAlt, {
+      lot: id,
+    }),
+    total: floor.total,
+    rooms: floor.rooms.map((room) => ({
+      name: dict.rooms[room.key],
+      area: room.area,
+    })),
+  });
+
+  return {
+    id,
+    title: id,
+    floors: {
+      parter: localizeFloor(assets.parter, "ground"),
+      pietro: localizeFloor(assets.pietro, "upper"),
+    },
+  };
 }
 
 export function parseAreaM2(area: string): number | null {

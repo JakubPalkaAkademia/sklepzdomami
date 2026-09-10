@@ -1,11 +1,13 @@
 "use client";
 
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { LocaleLink } from "@/components/LocaleLink";
+import { useDictionary } from "@/components/LocaleProvider";
 
 const STORAGE_KEY = "cookie_notice_dismissed";
 
 export function CookieNotice() {
+  const dict = useDictionary();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -31,14 +33,16 @@ export function CookieNotice() {
   if (!visible) return null;
 
   return (
-    <div className="cookie-notice" role="region" aria-label="informacja o plikach cookies">
+    <div className="cookie-notice" role="region" aria-label={dict.cookieNotice.ariaLabel}>
       <p className="cookie-notice__text">
-        Serwis korzysta wyłącznie z niezbędnych plików cookies. Szczegóły w{" "}
-        <Link href="/polityka-cookies">polityce cookies</Link> i{" "}
-        <Link href="/polityka-prywatnosci">polityce prywatności</Link>.
+        {dict.cookieNotice.beforeLinks}
+        <LocaleLink href="/polityka-cookies">{dict.cookieNotice.cookiesLink}</LocaleLink>
+        {dict.cookieNotice.betweenLinks}
+        <LocaleLink href="/polityka-prywatnosci">{dict.cookieNotice.privacyLink}</LocaleLink>
+        {dict.cookieNotice.afterLinks}
       </p>
       <button type="button" className="cookie-notice__btn" onClick={dismiss}>
-        OK
+        {dict.cookieNotice.ok}
       </button>
     </div>
   );
