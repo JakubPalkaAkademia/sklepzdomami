@@ -90,18 +90,24 @@ function getBusyTimesForDay(
   return Array.from(busyTimes);
 }
 
-export async function getGoogleBusySlots(
+const FREEBUSY_MAX_DAYS = 30;
+
+function addDays(date: Date, days: number): Date {
+  const next = new Date(date);
+  next.setDate(next.getDate() + days);
+  return next;
+}
+
+function formatDateOnly(date: Date): string {
+  return formatDateInTimezone(date);
+}
+
+async function queryFreeBusyPeriods(
+  calendar: ReturnType<typeof google.calendar>,
+  calendarId: string,
   from: string,
   to: string,
-  visitTimes: readonly string[],
-): Promise<BusySlot[]> {
-  const calendarId = getCalendarId();
-  const auth = getAuthClient();
-  if (!calendarId || !auth) {
-    return [];
-  }
-
-  const calendar = google.calendar({ version: "v3", auth });
+): Promise<{ start: string; end: string }[]> {
   const timeMin = new Date(`${from}T00:00:00+01:00`).toISOString();
   const timeMax = new Date(`${to}T23:59:59+01:00`).toISOString();
 
@@ -114,21 +120,43 @@ export async function getGoogleBusySlots(
     },
   });
 
-  const busyPeriods = response.data.calendars?.[calendarId]?.busy ?? [];
-  const slots: BusySlot[] = [];
+  return (response.data.calendars?.[calendarId]?.busy ?? []).map((period) => ({
+    start: period.start ?? "",
+    end: period.end ?? "",
+  }));
+}
+
+export async function getGoogleBusySlots(
+  from: string,
+  to: string,
+  visitTimes: readonly string[],
+): Promise<BusySlot[]> {
+  const calendarId = getCalendarId();
+  const auth = getAuthClient();
+  if (!calendarId || !auth) {
+    return [];
+  }
+
+  const calendar = google.calendar({ version: "v3", auth });
   const fromDate = new Date(`${from}T00:00:00`);
   const toDate = new Date(`${to}T00:00:00`);
+  const busyPeriods: { start: string; end: string }[] = [];
+
+  for (let chunkStart = new Date(fromDate); chunkStart <= toDate; ) {
+    const chunkEnd = addDays(chunkStart, FREEBUSY_MAX_DAYS - 1);
+    const boundedEnd = chunkEnd > toDate ? toDate : chunkEnd;
+    const chunkFrom = formatDateOnly(chunkStart);
+    const chunkTo = formatDateOnly(boundedEnd);
+    const periods = await queryFreeBusyPeriods(calendar, calendarId, chunkFrom, chunkTo);
+    busyPeriods.push(...periods);
+    chunkStart = addDays(boundedEnd, 1);
+  }
+
+  const slots: BusySlot[] = [];
 
   for (let cursor = new Date(fromDate); cursor <= toDate; cursor.setDate(cursor.getDate() + 1)) {
     const dateStr = formatDateInTimezone(cursor);
-    const busyTimes = getBusyTimesForDay(
-      busyPeriods.map((period) => ({
-        start: period.start ?? "",
-        end: period.end ?? "",
-      })),
-      dateStr,
-      visitTimes,
-    );
+    const busyTimes = getBusyTimesForDay(busyPeriods, dateStr, visitTimes);
     for (const time of busyTimes) {
       slots.push({ date: dateStr, time });
     }

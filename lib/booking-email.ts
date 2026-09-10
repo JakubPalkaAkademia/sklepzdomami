@@ -2,6 +2,7 @@ import { Resend } from "resend";
 import { buildIcsContent, formatVisitDate, type CalendarEventDetails } from "@/lib/booking";
 import { escapeHtml } from "@/lib/contact-form";
 import type { Locale } from "@/lib/i18n/config";
+import { getBookingNotifyEmails } from "@/lib/notification-emails";
 import { studio } from "@/lib/site";
 
 export type BookingEmailParams = {
@@ -24,7 +25,7 @@ function formatDateForEmail(date: string, locale: Locale): string {
 export async function sendBookingEmails(params: BookingEmailParams): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
   const from = process.env.RESEND_FROM ?? `Sklep z domami <onboarding@resend.dev>`;
-  const to = process.env.CONTACT_TO_EMAIL ?? studio.email;
+  const to = getBookingNotifyEmails();
 
   if (!apiKey) {
     throw new Error("RESEND_API_KEY is not configured");
@@ -91,7 +92,7 @@ export async function sendBookingEmails(params: BookingEmailParams): Promise<voi
 
   const staffResult = await resend.emails.send({
     from,
-    to: [to],
+    to,
     replyTo: params.email,
     subject: staffSubject,
     html: staffHtml,

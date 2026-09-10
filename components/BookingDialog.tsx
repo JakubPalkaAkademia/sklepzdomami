@@ -19,6 +19,13 @@ import {
   startOfDay,
   type BookedSlot,
 } from "@/lib/booking";
+import {
+  AppleCalendarIcon,
+  CheckIcon,
+  CloseIcon,
+  GoogleCalendarIcon,
+} from "@/components/BookingIcons";
+import { BookingStepProgress } from "@/components/BookingStepProgress";
 import { studio, visitTimes } from "@/lib/site";
 
 type BookingStep = "datetime" | "details" | "success";
@@ -299,13 +306,13 @@ export function BookingDialog() {
         onClick={(e) => e.stopPropagation()}
       >
         <header className="book-panel__header">
-          <div>
+          <div className="book-panel__header-copy">
+            <p className="book-panel__eyebrow">
+              {step === "success" ? booking.successSubtitle : booking.panelSubtitle}
+            </p>
             <h2 id={titleId} className="book-panel__title">
               {step === "success" ? booking.successTitle : booking.panelTitle}
             </h2>
-            <p className="book-panel__subtitle">
-              {step === "success" ? booking.successSubtitle : booking.panelSubtitle}
-            </p>
             {step !== "success" && (
               <p className="book-panel__location">{booking.locationLine}</p>
             )}
@@ -316,38 +323,46 @@ export function BookingDialog() {
             onClick={handleClose}
             aria-label={booking.close}
           >
-            ×
+            <CloseIcon />
           </button>
         </header>
 
+        {step !== "success" && (
+          <BookingStepProgress
+            current={step}
+            stepDateTime={booking.stepDateTime}
+            stepDetails={booking.stepDetails}
+            label={booking.stepLabel}
+          />
+        )}
+
         {step === "datetime" && (
           <>
-            <div className="book-panel__steps" aria-label={booking.stepLabel}>
-              <span className="book-panel__step book-panel__step--active">
-                1. {booking.stepDateTime}
-              </span>
-              <span className="book-panel__step">2. {booking.stepDetails}</span>
-            </div>
-            <div className="book-panel__body">
-              <div>
-                <span className="book-panel__field-label">{booking.dateLabel}</span>
-                <div className="book-calendar__nav">
-                  <button
-                    type="button"
-                    className="book-calendar__nav-btn"
-                    onClick={() => setVisibleMonth((current) => addMonths(current, -1))}
-                    aria-label={booking.prevMonth}
-                  >
-                    ‹
-                  </button>
-                  <button
-                    type="button"
-                    className="book-calendar__nav-btn"
-                    onClick={() => setVisibleMonth((current) => addMonths(current, 1))}
-                    aria-label={booking.nextMonth}
-                  >
-                    ›
-                  </button>
+            <div className="book-panel__body book-panel__body--datetime">
+              <div className="book-panel__calendar-col">
+                <div className="book-panel__section-head">
+                  <span className="book-panel__field-label">{booking.dateLabel}</span>
+                  <div className="book-calendar__nav">
+                    <button
+                      type="button"
+                      className="book-calendar__nav-btn"
+                      onClick={() => setVisibleMonth((current) => addMonths(current, -1))}
+                      aria-label={booking.prevMonth}
+                    >
+                      ‹
+                    </button>
+                    <p className="book-calendar__nav-label">
+                      {getMonthLabel(visibleMonth.getFullYear(), visibleMonth.getMonth(), locale)}
+                    </p>
+                    <button
+                      type="button"
+                      className="book-calendar__nav-btn"
+                      onClick={() => setVisibleMonth((current) => addMonths(current, 1))}
+                      aria-label={booking.nextMonth}
+                    >
+                      ›
+                    </button>
+                  </div>
                 </div>
                 {loadingAvailability && (
                   <p className="book-panel__loading">{booking.loadingAvailability}</p>
@@ -377,8 +392,13 @@ export function BookingDialog() {
                   </span>
                 </div>
               </div>
-              <div>
+              <div className="book-panel__times-col">
                 <span className="book-panel__field-label">{booking.timeLabel}</span>
+                {selectedDate && (
+                  <p className="book-panel__selection">
+                    {formatVisitDate(selectedDate, locale)}
+                  </p>
+                )}
                 <div className="book-times">
                   {visitTimes.map((time) => {
                     const isBooked =
@@ -420,94 +440,94 @@ export function BookingDialog() {
               >
                 {booking.nextLabel}
               </button>
-              <a href={studio.phoneHref} className="book-panel__phone">
-                {studio.phone}
-              </a>
+              <p className="book-panel__footer-note">
+                {booking.phoneHint}{" "}
+                <a href={studio.phoneHref}>{studio.phone}</a>
+              </p>
             </footer>
           </>
         )}
 
         {step === "details" && selectedDate && (
-          <>
-            <div className="book-panel__steps" aria-label={booking.stepLabel}>
-              <span className="book-panel__step">1. {booking.stepDateTime}</span>
-              <span className="book-panel__step book-panel__step--active">
-                2. {booking.stepDetails}
-              </span>
-            </div>
-            <form className="book-panel__body book-panel__form" onSubmit={handleSubmit} noValidate>
-              <p className="book-panel__summary">
-                {booking.selectedSummary
-                  .replace("{date}", formatVisitDate(selectedDate, locale))
-                  .replace("{time}", selectedTime)}
-              </p>
-
-              <div className="book-form__field">
-                <label className="book-form__label" htmlFor="booking-first-name">
-                  {booking.firstNameLabel}
-                </label>
-                <input
-                  id="booking-first-name"
-                  name="firstName"
-                  type="text"
-                  className="book-form__input"
-                  autoComplete="given-name"
-                  required
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  disabled={submitting}
-                />
+          <form className="book-panel__body book-panel__form" onSubmit={handleSubmit} noValidate>
+              <div className="book-panel__summary-card">
+                <p className="book-panel__summary-label">{booking.dateLabel}</p>
+                <p className="book-panel__summary-value">
+                  {formatVisitDate(selectedDate, locale)}
+                </p>
+                <p className="book-panel__summary-label">{booking.timeLabel}</p>
+                <p className="book-panel__summary-value">{selectedTime}</p>
               </div>
 
-              <div className="book-form__field">
-                <label className="book-form__label" htmlFor="booking-last-name">
-                  {booking.lastNameLabel}
-                </label>
-                <input
-                  id="booking-last-name"
-                  name="lastName"
-                  type="text"
-                  className="book-form__input"
-                  autoComplete="family-name"
-                  required
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  disabled={submitting}
-                />
-              </div>
+              <div className="book-form__grid">
 
-              <div className="book-form__field">
-                <label className="book-form__label" htmlFor="booking-email">
-                  {booking.emailLabel}
-                </label>
-                <input
-                  id="booking-email"
-                  name="email"
-                  type="email"
-                  className="book-form__input"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={submitting}
-                />
-              </div>
+                <div className="book-form__field">
+                  <label className="book-form__label" htmlFor="booking-first-name">
+                    {booking.firstNameLabel}
+                  </label>
+                  <input
+                    id="booking-first-name"
+                    name="firstName"
+                    type="text"
+                    className="book-form__input"
+                    autoComplete="given-name"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    disabled={submitting}
+                  />
+                </div>
 
-              <div className="book-form__field">
-                <label className="book-form__label" htmlFor="booking-phone">
-                  {booking.phoneLabel}
-                </label>
-                <input
-                  id="booking-phone"
-                  name="phone"
-                  type="tel"
-                  className="book-form__input"
-                  autoComplete="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  disabled={submitting}
-                />
+                <div className="book-form__field">
+                  <label className="book-form__label" htmlFor="booking-last-name">
+                    {booking.lastNameLabel}
+                  </label>
+                  <input
+                    id="booking-last-name"
+                    name="lastName"
+                    type="text"
+                    className="book-form__input"
+                    autoComplete="family-name"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className="book-form__field book-form__field--full">
+                  <label className="book-form__label" htmlFor="booking-email">
+                    {booking.emailLabel}
+                  </label>
+                  <input
+                    id="booking-email"
+                    name="email"
+                    type="email"
+                    className="book-form__input"
+                    autoComplete="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={submitting}
+                  />
+                </div>
+
+                <div className="book-form__field book-form__field--full">
+                  <label className="book-form__label" htmlFor="booking-phone">
+                    {booking.phoneLabel}
+                  </label>
+                  <input
+                    id="booking-phone"
+                    name="phone"
+                    type="tel"
+                    className="book-form__input"
+                    autoComplete="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    disabled={submitting}
+                  />
+                </div>
               </div>
 
               <input
@@ -523,45 +543,47 @@ export function BookingDialog() {
                 <p className="book-panel__error" role="alert">{errorMessage}</p>
               )}
 
-              <footer className="book-panel__footer book-panel__footer--inline">
-                <button
-                  type="button"
-                  className="book-panel__back"
-                  onClick={() => setStep("datetime")}
-                  disabled={submitting}
-                >
-                  {booking.backLabel}
-                </button>
-                <button
-                  type="submit"
-                  className="book-panel__confirm"
-                  disabled={submitting}
-                >
-                  {submitting ? booking.submittingLabel : booking.confirmLabel}
-                </button>
-              </footer>
-            </form>
-          </>
+            <footer className="book-panel__footer book-panel__footer--inline">
+              <button
+                type="button"
+                className="book-panel__back"
+                onClick={() => setStep("datetime")}
+                disabled={submitting}
+              >
+                {booking.backLabel}
+              </button>
+              <button
+                type="submit"
+                className="book-panel__confirm"
+                disabled={submitting}
+              >
+                {submitting ? booking.submittingLabel : booking.confirmLabel}
+              </button>
+            </footer>
+          </form>
         )}
 
         {step === "success" && successData && (
           <div className="book-panel__body book-panel__success">
+            <div className="book-panel__success-badge" aria-hidden="true">
+              <CheckIcon />
+            </div>
             <p className="book-panel__success-message">{booking.successMessage}</p>
-            <p className="book-panel__summary">
-              {booking.selectedSummary
-                .replace(
-                  "{date}",
-                  formatVisitDate(
-                    new Date(
-                      Number(successData.date.slice(0, 4)),
-                      Number(successData.date.slice(5, 7)) - 1,
-                      Number(successData.date.slice(8, 10)),
-                    ),
-                    locale,
+            <div className="book-panel__summary-card">
+              <p className="book-panel__summary-label">{booking.dateLabel}</p>
+              <p className="book-panel__summary-value">
+                {formatVisitDate(
+                  new Date(
+                    Number(successData.date.slice(0, 4)),
+                    Number(successData.date.slice(5, 7)) - 1,
+                    Number(successData.date.slice(8, 10)),
                   ),
-                )
-                .replace("{time}", successData.time)}
-            </p>
+                  locale,
+                )}
+              </p>
+              <p className="book-panel__summary-label">{booking.timeLabel}</p>
+              <p className="book-panel__summary-value">{successData.time}</p>
+            </div>
             <p className="book-panel__success-hint">{booking.addToCalendarHint}</p>
             <div className="book-panel__calendar-actions">
               <a
@@ -570,7 +592,8 @@ export function BookingDialog() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {booking.addToGoogle}
+                <GoogleCalendarIcon />
+                <span>{booking.addToGoogle}</span>
               </a>
               <button
                 type="button"
@@ -579,10 +602,11 @@ export function BookingDialog() {
                   downloadIcs(successData.icsContent, "wizyta-szmaragdowa-7.ics")
                 }
               >
-                {booking.addToApple}
+                <AppleCalendarIcon />
+                <span>{booking.addToApple}</span>
               </button>
             </div>
-            <footer className="book-panel__footer book-panel__footer--inline">
+            <footer className="book-panel__footer">
               <button type="button" className="book-panel__confirm" onClick={handleClose}>
                 {booking.closeSuccess}
               </button>

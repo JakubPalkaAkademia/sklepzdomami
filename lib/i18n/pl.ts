@@ -308,6 +308,7 @@ export const pl = {
     stepDateTime: "data i godzina",
     stepDetails: "dane kontaktowe",
     nextLabel: "dalej",
+    phoneHint: "lub zadzwoń:",
     backLabel: "wróć",
     firstNameLabel: "imię",
     lastNameLabel: "nazwisko",

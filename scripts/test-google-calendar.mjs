@@ -1,0 +1,46 @@
+import { google } from "googleapis";
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
+
+function loadEnv() {
+  const envPath = resolve(process.cwd(), ".env.local");
+  const content = readFileSync(envPath, "utf8");
+  for (const line of content.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const index = trimmed.indexOf("=");
+    if (index === -1) continue;
+    const key = trimmed.slice(0, index);
+    let value = trimmed.slice(index + 1);
+    if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+      value = value.slice(1, -1);
+    }
+    process.env[key] = value.replace(/\\n/g, "\n");
+  }
+}
+
+loadEnv();
+
+const auth = new google.auth.JWT({
+  email: process.env.GOOGLE_CLIENT_EMAIL,
+  key: process.env.GOOGLE_PRIVATE_KEY,
+  scopes: ["https://www.googleapis.com/auth/calendar"],
+});
+
+const calendar = google.calendar({ version: "v3", auth });
+const calendarId = process.env.GOOGLE_CALENDAR_ID;
+
+const list = await calendar.calendarList.list();
+console.log("Accessible calendars:", list.data.items?.map((item) => item.summary).join(", "));
+
+const freebusy = await calendar.freebusy.query({
+  requestBody: {
+    timeMin: new Date().toISOString(),
+    timeMax: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+    timeZone: "Europe/Warsaw",
+    items: [{ id: calendarId }],
+  },
+});
+
+console.log("Free/busy OK for:", calendarId);
+console.log("Busy slots:", freebusy.data.calendars?.[calendarId]?.busy?.length ?? 0);

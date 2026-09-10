@@ -298,6 +298,7 @@ export const de: Dictionary = {
     stepDateTime: "Datum und Uhrzeit",
     stepDetails: "Kontaktdaten",
     nextLabel: "weiter",
+    phoneHint: "oder anrufen:",
     backLabel: "zurück",
     firstNameLabel: "Vorname",
     lastNameLabel: "Nachname",
