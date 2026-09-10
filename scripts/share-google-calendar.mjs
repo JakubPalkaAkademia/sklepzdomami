@@ -59,6 +59,7 @@ for (const shareWith of shareWithList) {
   try {
     const acl = await calendar.acl.insert({
       calendarId,
+      sendNotifications: true,
       requestBody: {
         role: "writer",
         scope: {

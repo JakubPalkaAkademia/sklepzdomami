@@ -156,41 +156,43 @@ export type CalendarEventDetails = {
   description: string;
 };
 
-export function buildIcsContent(event: CalendarEventDetails): string {
+const ICS_TIMEZONE_BLOCK = [
+  "BEGIN:VTIMEZONE",
+  "TZID:Europe/Warsaw",
+  "BEGIN:STANDARD",
+  "TZOFFSETFROM:+0200",
+  "TZOFFSETTO:+0100",
+  "TZNAME:CET",
+  "DTSTART:19701025T030000",
+  "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
+  "END:STANDARD",
+  "BEGIN:DAYLIGHT",
+  "TZOFFSETFROM:+0100",
+  "TZOFFSETTO:+0200",
+  "TZNAME:CEST",
+  "DTSTART:19700329T020000",
+  "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
+  "END:DAYLIGHT",
+  "END:VTIMEZONE",
+];
+
+function buildIcsNowStamp(): string {
+  return new Date()
+    .toISOString()
+    .replace(/[-:]/g, "")
+    .replace(/\.\d{3}Z$/, "Z");
+}
+
+function buildIcsEventLines(event: CalendarEventDetails): string[] {
   const startMinutes = parseTimeToMinutes(event.time);
   const endMinutes = startMinutes + VISIT_DURATION_MINUTES;
   const endHours = Math.floor(endMinutes / 60);
   const endMins = endMinutes % 60;
   const endTime = `${String(endHours).padStart(2, "0")}:${String(endMins).padStart(2, "0")}`;
   const uid = `${event.date.replace(/-/g, "")}T${event.time.replace(":", "")}@sklepzdomami.com`;
-  const now = new Date()
-    .toISOString()
-    .replace(/[-:]/g, "")
-    .replace(/\.\d{3}Z$/, "Z");
+  const now = buildIcsNowStamp();
 
   return [
-    "BEGIN:VCALENDAR",
-    "VERSION:2.0",
-    "PRODID:-//Sklep z domami//Booking//PL",
-    "CALSCALE:GREGORIAN",
-    "METHOD:PUBLISH",
-    "BEGIN:VTIMEZONE",
-    "TZID:Europe/Warsaw",
-    "BEGIN:STANDARD",
-    "TZOFFSETFROM:+0200",
-    "TZOFFSETTO:+0100",
-    "TZNAME:CET",
-    "DTSTART:19701025T030000",
-    "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU",
-    "END:STANDARD",
-    "BEGIN:DAYLIGHT",
-    "TZOFFSETFROM:+0100",
-    "TZOFFSETTO:+0200",
-    "TZNAME:CEST",
-    "DTSTART:19700329T020000",
-    "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU",
-    "END:DAYLIGHT",
-    "END:VTIMEZONE",
     "BEGIN:VEVENT",
     `UID:${uid}`,
     `DTSTAMP:${now}`,
@@ -200,6 +202,36 @@ export function buildIcsContent(event: CalendarEventDetails): string {
     `LOCATION:${escapeIcsText(event.location)}`,
     `DESCRIPTION:${escapeIcsText(event.description)}`,
     "END:VEVENT",
+  ];
+}
+
+export function buildIcsFeedContent(events: CalendarEventDetails[]): string {
+  const now = buildIcsNowStamp();
+
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Sklep z domami//Staff Booking Feed//PL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    "NAME:Wizyty Szmaragdowa 7",
+    "X-WR-CALNAME:Wizyty Szmaragdowa 7",
+    `DTSTAMP:${now}`,
+    ...ICS_TIMEZONE_BLOCK,
+    ...events.flatMap((event) => buildIcsEventLines(event)),
+    "END:VCALENDAR",
+  ].join("\r\n");
+}
+
+export function buildIcsContent(event: CalendarEventDetails): string {
+  return [
+    "BEGIN:VCALENDAR",
+    "VERSION:2.0",
+    "PRODID:-//Sklep z domami//Booking//PL",
+    "CALSCALE:GREGORIAN",
+    "METHOD:PUBLISH",
+    ...ICS_TIMEZONE_BLOCK,
+    ...buildIcsEventLines(event),
     "END:VCALENDAR",
   ].join("\r\n");
 }

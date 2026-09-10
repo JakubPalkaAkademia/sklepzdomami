@@ -11,6 +11,7 @@ const REQUIRED_KEYS = [
   "GOOGLE_CALENDAR_ID",
   "GOOGLE_CLIENT_EMAIL",
   "GOOGLE_PRIVATE_KEY",
+  "BOOKING_CALENDAR_ICS_TOKEN",
 ];
 
 const ENVIRONMENTS = ["production", "preview", "development"];

@@ -1,4 +1,5 @@
 import { google } from "googleapis";
+import type { CalendarEventDetails } from "@/lib/booking";
 
 const TIMEZONE = "Europe/Warsaw";
 const VISIT_DURATION_MINUTES = 60;
@@ -223,4 +224,76 @@ export async function createCalendarEvent(
   });
 
   return response.data.id ?? null;
+}
+
+function formatGoogleDateTimeParts(dateTime: string): { date: string; time: string } | null {
+  const date = new Date(dateTime);
+  if (Number.isNaN(date.getTime())) {
+    return null;
+  }
+
+  const dateFormatter = new Intl.DateTimeFormat("en-CA", {
+    timeZone: TIMEZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  });
+  const timeFormatter = new Intl.DateTimeFormat("en-GB", {
+    timeZone: TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
+
+  const dateValue = dateFormatter.format(date);
+  const timeValue = timeFormatter.format(date).replace(/^24:/, "00:");
+
+  return { date: dateValue, time: timeValue };
+}
+
+export async function listCalendarEventsForFeed(
+  monthsAhead = 6,
+): Promise<CalendarEventDetails[]> {
+  const calendarId = getCalendarId();
+  const auth = getAuthClient();
+  if (!calendarId || !auth) {
+    return [];
+  }
+
+  const calendar = google.calendar({ version: "v3", auth });
+  const timeMin = new Date().toISOString();
+  const timeMax = addDays(new Date(), monthsAhead * 31).toISOString();
+
+  const response = await calendar.events.list({
+    calendarId,
+    timeMin,
+    timeMax,
+    singleEvents: true,
+    orderBy: "startTime",
+    maxResults: 250,
+  });
+
+  const events: CalendarEventDetails[] = [];
+
+  for (const item of response.data.items ?? []) {
+    const startDateTime = item.start?.dateTime;
+    if (!startDateTime || !item.summary) {
+      continue;
+    }
+
+    const parts = formatGoogleDateTimeParts(startDateTime);
+    if (!parts) {
+      continue;
+    }
+
+    events.push({
+      date: parts.date,
+      time: parts.time,
+      title: item.summary,
+      location: item.location ?? "",
+      description: item.description ?? "",
+    });
+  }
+
+  return events;
 }
