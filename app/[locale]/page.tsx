@@ -11,7 +11,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const locale = await resolveLocale(params);
   const dict = getDictionary(locale);
-  return pageMetadata(locale, "/", dict.investment.title, dict.investment.intro);
+  return pageMetadata(locale, "/", dict.metadata.titleDefault, dict.metadata.description, {
+    absoluteTitle: true,
+  });
 }
 
 export default async function HomePage({

@@ -3,7 +3,7 @@ import { Inter, Newsreader } from "next/font/google";
 import { headers } from "next/headers";
 import { StructuredData } from "@/components/StructuredData";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
-import { hero } from "@/lib/site";
+import { hero, site } from "@/lib/site";
 import "./vipp-shelter.css";
 
 const vippSans = Inter({
@@ -21,10 +21,18 @@ const vippSerif = Newsreader({
   display: "swap",
 });
 
+const googleVerification = process.env.GOOGLE_SITE_VERIFICATION;
+const bingVerification = process.env.BING_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(site.url),
   icons: {
-    icon: "/logo-icon.png",
-    apple: "/logo-icon.png",
+    icon: [{ url: site.logo, type: "image/svg+xml" }],
+    apple: site.logo,
+  },
+  verification: {
+    ...(googleVerification ? { google: googleVerification } : {}),
+    ...(bingVerification ? { other: { "msvalidate.01": bingVerification } } : {}),
   },
 };
 

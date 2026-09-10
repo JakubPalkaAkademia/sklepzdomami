@@ -8,7 +8,10 @@
     "build": "next build",
     "start": "next start",
     "preview": "npm run build && next start -p 43123 -H 0.0.0.0",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seo:status": "node scripts/seo-status.mjs",
+    "seo:indexnow": "node scripts/submit-indexnow.mjs",
+    "seo:google-dns": "node scripts/add-google-dns-verification.mjs"
   },
   "dependencies": {
     "@neondatabase/serverless": "^1.1.0",

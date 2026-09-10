@@ -7,8 +7,16 @@ const administratorBlock = [
 
 export const pl = {
   metadata: {
-    titleDefault: `Szmaragdowa 7 · ${site.name}`,
+    titleDefault: `Domy na sprzedaż Szmaragdowa 7 Morzyczyn | ${site.name}`,
     titleTemplate: `%s · ${site.name}`,
+    description:
+      "Kameralne domy bliźniacze Szmaragdowa 7 w Morzyczynie nad jeziorem Miedwie. Cztery lokale 7A–7D, wygodny dojazd do Szczecina i Stargardu. Umów wizytę online.",
+    aboutTitle: "O nas",
+    aboutDescription:
+      "Sklep z Domami projektuje i buduje domy od wyboru miejsca po materiały i wnętrza. Inwestycja Szmaragdowa 7 w Morzyczynie nad Miedwiem.",
+    contactTitle: "Kontakt",
+    contactDescription:
+      "Kontakt do Sklepu z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Pracownia w Szczecinie, inwestycja Szmaragdowa 7 w Morzyczynie. Umów wizytę.",
   },
   nav: {
     ariaLabel: "nawigacja",

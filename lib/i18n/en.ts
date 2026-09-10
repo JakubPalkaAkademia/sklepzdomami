@@ -8,8 +8,16 @@ const administratorBlock = [
 
 export const en: Dictionary = {
   metadata: {
-    titleDefault: `Szmaragdowa 7 · ${site.name}`,
+    titleDefault: `Houses for sale Szmaragdowa 7 Morzyczyn | ${site.name}`,
     titleTemplate: `%s · ${site.name}`,
+    description:
+      "Semi-detached houses at Szmaragdowa 7 in Morzyczyn, by Lake Miedwie. Four units 7A–7D, with a convenient commute to Szczecin and Stargard. Book a visit online.",
+    aboutTitle: "About us",
+    aboutDescription:
+      "Sklep z Domami designs and builds houses from site and concept through materials and interiors. Szmaragdowa 7 in Morzyczyn, by Lake Miedwie.",
+    contactTitle: "Contact",
+    contactDescription:
+      "Contact Sklep z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Studio in Szczecin, Szmaragdowa 7 development in Morzyczyn. Book a visit.",
   },
   nav: {
     ariaLabel: "navigation",

@@ -8,8 +8,16 @@ const administratorBlock = [
 
 export const de: Dictionary = {
   metadata: {
-    titleDefault: `Szmaragdowa 7 · ${site.name}`,
+    titleDefault: `Häuser zum Kauf Szmaragdowa 7 Morzyczyn | ${site.name}`,
     titleTemplate: `%s · ${site.name}`,
+    description:
+      "Doppelhaushälften an der Szmaragdowa 7 in Morzyczyn am Miedwie-See. Vier Einheiten 7A–7D, mit bequemer Anbindung nach Stettin und Stargard. Besuch online vereinbaren.",
+    aboutTitle: "Über uns",
+    aboutDescription:
+      "Sklep z Domami entwirft und baut Häuser vom Ort und Entwurf bis zu Materialien und Innenräumen. Investition Szmaragdowa 7 in Morzyczyn am Miedwie-See.",
+    contactTitle: "Kontakt",
+    contactDescription:
+      "Kontakt zu Sklep z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Atelier in Stettin, Investition Szmaragdowa 7 in Morzyczyn. Besuch vereinbaren.",
   },
   nav: {
     ariaLabel: "Navigation",

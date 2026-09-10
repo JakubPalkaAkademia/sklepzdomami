@@ -7,7 +7,8 @@ import { LocaleProvider } from "@/components/LocaleProvider";
 import { getDictionary } from "@/lib/i18n";
 import { isLocale, localeOg, locales } from "@/lib/i18n/config";
 import { resolveLocale } from "@/lib/i18n/params";
-import { hero, site } from "@/lib/site";
+import { ogImage } from "@/lib/i18n/seo";
+import { site } from "@/lib/site";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -29,14 +30,21 @@ export async function generateMetadata({
       default: dict.metadata.titleDefault,
       template: dict.metadata.titleTemplate,
     },
-    description: dict.investment.intro,
+    description: dict.metadata.description,
     openGraph: {
       type: "website",
       locale: localeOg[locale],
       siteName: site.name,
       title: dict.metadata.titleDefault,
-      description: dict.investment.tagline,
-      images: [{ url: hero.poster, width: 1500, height: 500, alt: dict.investment.title }],
+      description: dict.metadata.description,
+      images: [ogImage(dict.investment.title)],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: site.twitter,
+      title: dict.metadata.titleDefault,
+      description: dict.metadata.description,
+      images: [site.ogImage],
     },
   };
 }

@@ -5,6 +5,21 @@ export const site = {
   domain: "sklepzdomami.com",
   url: "https://sklepzdomami.com",
   locale: "pl_PL",
+  ogImage: "/render-front.jpg",
+  ogImageWidth: 1600,
+  ogImageHeight: 1067,
+  logo: "/logo-mark.svg",
+  twitter: "@Sklepzdomami",
+} as const;
+
+export const investmentPlace = {
+  name: "Szmaragdowa 7",
+  streetAddress: "ul. Szmaragdowa 7",
+  postalCode: "73-108",
+  addressLocality: "Morzyczyn",
+  addressRegion: "Zachodniopomorskie",
+  addressCountry: "PL",
+  numberOfUnits: 4,
 } as const;
 
 /** Studio / legal — contact & footer only. */

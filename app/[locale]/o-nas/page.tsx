@@ -9,8 +9,8 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const locale = await resolveLocale(params);
-  const about = getDictionary(locale).about;
-  return pageMetadata(locale, "/o-nas", about.title, about.lead);
+  const dict = getDictionary(locale);
+  return pageMetadata(locale, "/o-nas", dict.metadata.aboutTitle, dict.metadata.aboutDescription);
 }
 
 export default async function AboutPage({
