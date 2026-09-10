@@ -30,7 +30,7 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
       </h2>
       <div className="m14-info__grid">
         <div className="m14-info__media m14-info__media--plan">
-          {floor && lot ? (
+          {floor?.image && lot ? (
             <>
               <div className="m14-info__floor-toggle" role="tablist" aria-label={dict.ui.floorAriaLabel}>
                 {(Object.keys(lot.floors) as FloorKey[]).map((key) => (
