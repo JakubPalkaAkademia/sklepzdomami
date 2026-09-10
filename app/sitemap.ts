@@ -3,7 +3,7 @@ import { site } from "@/lib/site";
 
 const routes = [
   "",
-  "/pracownia",
+  "/o-nas",
   "/kontakt",
   "/polityka-prywatnosci",
   "/polityka-cookies",

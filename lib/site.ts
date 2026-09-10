@@ -217,18 +217,35 @@ export const investment = {
   ],
 } as const;
 
-export const pracownia = {
-  title: "pracownia",
-  paragraphs: [
-    "Sklep z domami to mała pracownia projektowo-wykonawcza z Szczecina. Projektujemy i budujemy domy jednorodzinne — od pierwszego szkicu po klucz na placu budowy.",
-    "Obecnie realizujemy inwestycję Szmaragdowa 7 — parę domów bliźniaczych nad Miedwiem. Jakub Palka odpowiada za architekturę wnętrz; Martyna Miłowska prowadzi proces inwestycyjny.",
+export const oNas = {
+  title: "o nas",
+  lead: "Tworzymy domy od początku do końca.",
+  intro: [
+    "Sklep z Domami powstał z potrzeby tworzenia domów w sposób bardziej świadomy — od wyboru miejsca i pierwszych decyzji projektowych, aż po materiały, wykończenie i wnętrze.",
+    "Interesuje nas cały proces. Dlatego łączymy projektowanie, realizację i architekturę wnętrz, patrząc na dom jako na jedną, spójną całość.",
   ],
-  processTitle: "proces",
-  process: [
-    { step: "01", title: "rozmowa", text: "Spotkanie w pracowni lub na działce." },
-    { step: "02", title: "projekt", text: "Bryła, układ, materiały — jeden spójny język." },
-    { step: "03", title: "budowa", text: "Prowadzimy roboty na własnym obiekcie." },
-    { step: "04", title: "oddanie", text: "Dom gotowy do zamieszkania." },
+  sections: [
+    {
+      heading: "Zaczynamy od miejsca.",
+      paragraphs: [
+        "Każdy dom jest inny, bo każde miejsce jest inne. Światło, otoczenie, widoki, ogród i sposób, w jaki chcemy korzystać z przestrzeni, mają wpływ na projekt równie mocno jak sama architektura.",
+        "Szmaragdowa 7 powstała właśnie z takiego podejścia. Bliskość Miedwia, spokojne otoczenie i duża działka stały się punktem wyjścia do stworzenia domu, który daje więcej przestrzeni i jednocześnie pozwala żyć bliżej natury.",
+      ],
+    },
+    {
+      heading: "Dbamy o to, co widać — i o to, czego nie widać.",
+      paragraphs: [
+        "Od początku zwracamy uwagę na materiały, proporcje i wykonanie. Wybieramy rozwiązania, które dobrze współgrają z architekturą domu i mają sprawdzać się przez lata.",
+        "Tak samo podchodzimy do wnętrza. Dlatego dom może zostać wykończony pod klucz, z indywidualnym projektem dopasowanym do potrzeb i stylu życia jego mieszkańców.",
+      ],
+    },
+    {
+      heading: "Nie korzystamy z jednego gotowego schematu.",
+      paragraphs: [
+        "Chcemy tworzyć domy, które są przemyślane w każdym szczególe, ale jednocześnie naturalne i wygodne w codziennym życiu.",
+        "Sklep z Domami to sposób na stworzenie domu, w którym projekt, materiały i wnętrze mogą od początku tworzyć jedną całość.",
+      ],
+    },
   ],
 } as const;
 
@@ -263,6 +280,6 @@ export const booking = {
 } as const;
 
 export const nav = [
-  { href: "/pracownia", label: "pracownia" },
+  { href: "/o-nas", label: "o nas" },
   { href: "/kontakt", label: "kontakt" },
 ] as const;
