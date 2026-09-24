@@ -17,6 +17,9 @@ export const pl = {
     contactTitle: "Kontakt",
     contactDescription:
       "Kontakt do Sklepu z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Pracownia w Szczecinie, inwestycja Szmaragdowa 7 w Morzyczynie. Umów wizytę.",
+    bookingConfirmationTitle: "Wizyta umówiona",
+    bookingConfirmationDescription:
+      "Potwierdzenie rezerwacji wizyty na budowie Szmaragdowa 7 w Morzyczynie.",
   },
   nav: {
     ariaLabel: "nawigacja",
@@ -333,6 +336,7 @@ export const pl = {
     addToGoogle: "Dodaj do Google Calendar",
     addToApple: "Dodaj do kalendarza Apple",
     closeSuccess: "zamknij",
+    backToSite: "Wróć na stronę główną",
     eventTitle: "Wizyta na budowie — {name}",
     eventDescription:
       "Oględziny inwestycji Szmaragdowa 7.\nAdres: {location}",

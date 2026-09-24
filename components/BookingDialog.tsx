@@ -19,16 +19,16 @@ import {
   startOfDay,
   type BookedSlot,
 } from "@/lib/booking";
+import { CloseIcon } from "@/components/BookingIcons";
 import {
-  AppleCalendarIcon,
-  CheckIcon,
-  CloseIcon,
-  GoogleCalendarIcon,
-} from "@/components/BookingIcons";
+  BOOKING_CONFIRMATION_PATH,
+  saveBookingConfirmation,
+} from "@/lib/booking-confirmation";
+import { localizedUrl } from "@/lib/i18n/paths";
 import { BookingStepProgress } from "@/components/BookingStepProgress";
 import { studio, visitTimes } from "@/lib/site";
 
-type BookingStep = "datetime" | "details" | "success";
+type BookingStep = "datetime" | "details";
 
 type SuccessData = {
   date: string;
@@ -105,16 +105,6 @@ function MonthCalendar({
   );
 }
 
-function downloadIcs(content: string, filename: string) {
-  const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  link.click();
-  URL.revokeObjectURL(url);
-}
-
 export function BookingDialog() {
   const { isOpen, close } = useBooking();
   const dict = useDictionary();
@@ -129,7 +119,6 @@ export function BookingDialog() {
   const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [successData, setSuccessData] = useState<SuccessData | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   const [firstName, setFirstName] = useState("");
@@ -150,7 +139,6 @@ export function BookingDialog() {
     setEmail("");
     setPhone("");
     setErrorMessage("");
-    setSuccessData(null);
     setVisibleMonth(startOfDay(new Date()));
   }, []);
 
@@ -281,8 +269,10 @@ export function BookingDialog() {
         return;
       }
 
-      setSuccessData(result.booking);
-      setStep("success");
+      saveBookingConfirmation(result.booking);
+      close();
+      resetForm();
+      window.location.assign(localizedUrl(locale, BOOKING_CONFIRMATION_PATH));
     } catch {
       setErrorMessage(booking.errors.sendFailed);
     } finally {
@@ -307,15 +297,11 @@ export function BookingDialog() {
       >
         <header className="book-panel__header">
           <div className="book-panel__header-copy">
-            <p className="book-panel__eyebrow">
-              {step === "success" ? booking.successSubtitle : booking.panelSubtitle}
-            </p>
+            <p className="book-panel__eyebrow">{booking.panelSubtitle}</p>
             <h2 id={titleId} className="book-panel__title">
-              {step === "success" ? booking.successTitle : booking.panelTitle}
+              {booking.panelTitle}
             </h2>
-            {step !== "success" && (
-              <p className="book-panel__location">{booking.locationLine}</p>
-            )}
+            <p className="book-panel__location">{booking.locationLine}</p>
           </div>
           <button
             type="button"
@@ -327,14 +313,12 @@ export function BookingDialog() {
           </button>
         </header>
 
-        {step !== "success" && (
-          <BookingStepProgress
-            current={step}
-            stepDateTime={booking.stepDateTime}
-            stepDetails={booking.stepDetails}
-            label={booking.stepLabel}
-          />
-        )}
+        <BookingStepProgress
+          current={step}
+          stepDateTime={booking.stepDateTime}
+          stepDetails={booking.stepDetails}
+          label={booking.stepLabel}
+        />
 
         {step === "datetime" && (
           <>
@@ -563,56 +547,6 @@ export function BookingDialog() {
           </form>
         )}
 
-        {step === "success" && successData && (
-          <div className="book-panel__body book-panel__success">
-            <div className="book-panel__success-badge" aria-hidden="true">
-              <CheckIcon />
-            </div>
-            <p className="book-panel__success-message">{booking.successMessage}</p>
-            <div className="book-panel__summary-card">
-              <p className="book-panel__summary-label">{booking.dateLabel}</p>
-              <p className="book-panel__summary-value">
-                {formatVisitDate(
-                  new Date(
-                    Number(successData.date.slice(0, 4)),
-                    Number(successData.date.slice(5, 7)) - 1,
-                    Number(successData.date.slice(8, 10)),
-                  ),
-                  locale,
-                )}
-              </p>
-              <p className="book-panel__summary-label">{booking.timeLabel}</p>
-              <p className="book-panel__summary-value">{successData.time}</p>
-            </div>
-            <p className="book-panel__success-hint">{booking.addToCalendarHint}</p>
-            <div className="book-panel__calendar-actions">
-              <a
-                href={successData.googleCalendarUrl}
-                className="book-panel__calendar-btn book-panel__calendar-btn--google"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <GoogleCalendarIcon />
-                <span>{booking.addToGoogle}</span>
-              </a>
-              <button
-                type="button"
-                className="book-panel__calendar-btn book-panel__calendar-btn--apple"
-                onClick={() =>
-                  downloadIcs(successData.icsContent, "wizyta-szmaragdowa-7.ics")
-                }
-              >
-                <AppleCalendarIcon />
-                <span>{booking.addToApple}</span>
-              </button>
-            </div>
-            <footer className="book-panel__footer">
-              <button type="button" className="book-panel__confirm" onClick={handleClose}>
-                {booking.closeSuccess}
-              </button>
-            </footer>
-          </div>
-        )}
       </div>
     </div>
   );

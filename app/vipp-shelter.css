@@ -2898,6 +2898,51 @@ html.booking-open body {
   background: transparent;
 }
 
+.page--booking-confirmation {
+  max-width: 36rem;
+}
+
+.book-confirmation {
+  display: grid;
+  gap: 1.25rem;
+  justify-items: start;
+}
+
+.book-confirmation__badge {
+  margin-bottom: 0.25rem;
+}
+
+.book-confirmation__eyebrow {
+  margin: 0;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.book-confirmation__title {
+  margin: 0;
+}
+
+.book-confirmation__message {
+  margin: 0;
+}
+
+.book-confirmation__summary {
+  width: 100%;
+}
+
+.book-confirmation__calendar-actions {
+  max-width: 100%;
+}
+
+.book-confirmation__home {
+  margin: 0.5rem 0 0;
+}
+
+.book-confirmation__home-link {
+  color: var(--vipp-black);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* icons */
 
 .book-icon {

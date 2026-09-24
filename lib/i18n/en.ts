@@ -18,6 +18,9 @@ export const en: Dictionary = {
     contactTitle: "Contact",
     contactDescription:
       "Contact Sklep z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Studio in Szczecin, Szmaragdowa 7 development in Morzyczyn. Book a visit.",
+    bookingConfirmationTitle: "Visit booked",
+    bookingConfirmationDescription:
+      "Confirmation of your site visit booking at Szmaragdowa 7 in Morzyczyn.",
   },
   nav: {
     ariaLabel: "navigation",
@@ -321,6 +324,7 @@ export const en: Dictionary = {
     addToGoogle: "Add to Google Calendar",
     addToApple: "Add to Apple Calendar",
     closeSuccess: "close",
+    backToSite: "Back to homepage",
     eventTitle: "Site visit — {name}",
     eventDescription:
       "Viewing of the Szmaragdowa 7 development.\nAddress: {location}",

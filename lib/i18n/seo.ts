@@ -17,18 +17,19 @@ export function pageMetadata(
   path: string,
   title: string,
   description: string,
-  options?: { absoluteTitle?: boolean },
+  options?: { absoluteTitle?: boolean; noIndex?: boolean },
 ): Metadata {
   const url = localizedUrl(locale, path);
   const ogTitle = options?.absoluteTitle ? title : `${title} · ${site.name}`;
+  const indexable = !options?.noIndex;
   return {
     title: options?.absoluteTitle ? { absolute: title } : title,
     description,
     robots: {
-      index: true,
+      index: indexable,
       follow: true,
       googleBot: {
-        index: true,
+        index: indexable,
         follow: true,
         "max-image-preview": "large",
         "max-snippet": -1,

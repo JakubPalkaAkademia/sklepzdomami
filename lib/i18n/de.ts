@@ -18,6 +18,9 @@ export const de: Dictionary = {
     contactTitle: "Kontakt",
     contactDescription:
       "Kontakt zu Sklep z Domami: +48 504 194 854, biuro@sklepzdomami.pl. Atelier in Stettin, Investition Szmaragdowa 7 in Morzyczyn. Besuch vereinbaren.",
+    bookingConfirmationTitle: "Besuch gebucht",
+    bookingConfirmationDescription:
+      "Bestätigung Ihrer Baustellenbesichtigung an der Szmaragdowa 7 in Morzyczyn.",
   },
   nav: {
     ariaLabel: "Navigation",
@@ -323,6 +326,7 @@ export const de: Dictionary = {
     addToGoogle: "Zu Google Calendar hinzufügen",
     addToApple: "Zu Apple Kalender hinzufügen",
     closeSuccess: "schließen",
+    backToSite: "Zur Startseite",
     eventTitle: "Baustellenbesichtigung — {name}",
     eventDescription:
       "Besichtigung der Investition Szmaragdowa 7.\nAdresse: {location}",
