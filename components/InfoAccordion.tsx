@@ -16,7 +16,7 @@ type InfoAccordionProps = {
 };
 
 function specValue(spec: InvestmentContent["lotSpecs"][number], lotId: LotId): string {
-  if ("values" in spec) {
+  if ("values" in spec && spec.values) {
     return spec.values[lotId];
   }
   return spec.value;
