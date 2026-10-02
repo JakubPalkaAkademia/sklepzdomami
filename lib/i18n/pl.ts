@@ -210,8 +210,26 @@ export const pl = {
     ],
     specsTitle: "informacje",
     lotSpecs: [
-      { id: "price", label: "cena", value: "8900 zł za m²" },
-      { id: "status", label: "status", value: "w budowie" },
+      {
+        id: "price",
+        label: "cena",
+        values: {
+          "7A": "8900 zł za m²",
+          "7B": "9600 zł za m²",
+          "7C": "8900 zł za m²",
+          "7D": "9600 zł za m²",
+        },
+      },
+      {
+        id: "status",
+        label: "status",
+        values: {
+          "7A": "w budowie - dostępny",
+          "7B": "w budowie - rezerwacja",
+          "7C": "w budowie - dostępny",
+          "7D": "w budowie - rezerwacja",
+        },
+      },
       { id: "address", label: "adres inwestycji", value: "ul. Szmaragdowa 7, 73-108 Morzyczyn" },
     ],
     siteBasicsTitle: "Informacje",

@@ -1,14 +1,14 @@
 /** PDF page crop — bez marginesów drukarskich i pasków kalibracji. */
 export const mapCrop = {
-  x: 220,
-  y: 120,
+  x: 190,
+  y: 0,
   width: 1200,
-  height: 1090,
+  height: 700,
 } as const;
 
 export const mapImageSize = {
   width: 2400,
-  height: 2180,
+  height: 1400,
 } as const;
 
 export const mapViewBox = {
@@ -47,25 +47,25 @@ export const mapLots: MapLot[] = [
     id: "7A",
     label: "7A",
     layerImage: "/mapa/layer-7A.png",
-    hit: pdfBBoxToCrop(634.0, 930.5, 835.5, 1112.5),
+    hit: pdfBBoxToCrop(604.0, 421.5, 805.5, 603.0),
   },
   {
     id: "7B",
     label: "7B",
     layerImage: "/mapa/layer-7B.png",
-    hit: pdfBBoxToCrop(541.5, 824.0, 736.5, 1013.0),
+    hit: pdfBBoxToCrop(511.5, 314.5, 706.5, 503.5),
   },
   {
     id: "7C",
     label: "7C",
     layerImage: "/mapa/layer-7C.png",
-    hit: pdfBBoxToCrop(815.0, 775.0, 998.0, 978.5),
+    hit: pdfBBoxToCrop(785.0, 265.5, 968.0, 469.0),
   },
   {
     id: "7D",
     label: "7D",
     layerImage: "/mapa/layer-7D.png",
-    hit: pdfBBoxToCrop(719.5, 673.0, 908.5, 868.5),
+    hit: pdfBBoxToCrop(689.5, 163.5, 878.5, 359.0),
   },
 ];
 

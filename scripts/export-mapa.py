@@ -1,4 +1,4 @@
-"""Export interactive map assets from mapaINT.pdf."""
+"""Export interactive map assets from mapaINT2.pdf."""
 
 from __future__ import annotations
 
@@ -9,15 +9,16 @@ from pathlib import Path
 import numpy as np
 import pikepdf
 import pymupdf as fitz
-from PIL import Image
+from PIL import Image, ImageFilter
 
-PDF_PATH = Path(r"C:\Users\JakubPalka\Downloads\mapaINT.pdf")
+PDF_PATH = Path(r"C:\Users\JakubPalka\Downloads\mapaINT2.pdf")
 OUT_DIR = Path(__file__).resolve().parent.parent / "public" / "mapa"
 ZOOM = 2.0
 MAT = fitz.Matrix(ZOOM, ZOOM)
 
-# Trim printer marks; wider than the first tight crop, narrower than full page.
-MAP_CROP_PDF = (80, 70, 1520, 1210)  # x0, y0, x1, y1 in PDF units
+# mapaINT2 is mapaINT shifted by (-30, -510). This crop keeps the previous
+# horizontal frame and bottom edge, and drops the top that the new PDF removed.
+MAP_CROP_PDF = (190, 0, 1390, 700)  # x0, y0, x1, y1 in PDF units
 LOT_NAMES = ["7D", "7C", "7B", "7A"]
 DIFF_THRESHOLD = 25
 
@@ -60,6 +61,27 @@ def white_to_alpha(img: Image.Image) -> Image.Image:
     return Image.fromarray(arr)
 
 
+# Context strokes in mapaINT2 are near-black green. The previous map drew them as this mint.
+CONTEXT_LINE_RGB = (160, 200, 175)
+
+
+def brighten_context_lines(img: Image.Image) -> Image.Image:
+    """Lift thin cadastral lines so they stay visible on the dark page."""
+    arr = np.array(img)
+    rgb = arr[:, :, :3].astype(int)
+    alpha = arr[:, :, 3]
+    compass = (rgb.min(axis=2) > 170) & (alpha > 20)
+    content = (alpha > 20) & ~compass
+    mask = Image.fromarray(content.astype(np.uint8) * 255)
+    thick = mask.filter(ImageFilter.MinFilter(5)).filter(ImageFilter.MaxFilter(5))
+    lines = content & (np.array(thick) <= 128)
+    arr[lines, 0] = CONTEXT_LINE_RGB[0]
+    arr[lines, 1] = CONTEXT_LINE_RGB[1]
+    arr[lines, 2] = CONTEXT_LINE_RGB[2]
+    arr[lines, 3] = 255
+    return Image.fromarray(arr)
+
+
 def build_overlay(combo: np.ndarray, mapa_only: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
     diff = np.abs(combo[:, :, :3].astype(int) - mapa_only[:, :, :3].astype(int)).sum(axis=2) > DIFF_THRESHOLD
 
@@ -88,7 +110,7 @@ def main() -> None:
     crop_h = MAP_CROP_PDF[3] - MAP_CROP_PDF[1]
 
     mapa_only = np.array(render_page(["MAPA"], LOT_NAMES))
-    base = white_to_alpha(Image.fromarray(mapa_only))
+    base = brighten_context_lines(white_to_alpha(Image.fromarray(mapa_only)))
     base.save(OUT_DIR / "mapa-base.png", optimize=True)
 
     lots: dict[str, dict[str, object]] = {}

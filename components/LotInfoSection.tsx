@@ -81,6 +81,7 @@ export function LotInfoSection({ displayLot }: LotInfoSectionProps) {
           </h2>
           <InfoAccordion
             key={displayLot}
+            lotId={displayLot}
             groundFloor={lot?.floors.parter}
             upperFloor={lot?.floors.pietro}
             onExpandedChange={setInfoExpanded}

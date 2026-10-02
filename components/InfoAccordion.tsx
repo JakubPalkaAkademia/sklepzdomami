@@ -2,16 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useDictionary } from "@/components/LocaleProvider";
-import { getInvestment } from "@/lib/content";
+import { getInvestment, type InvestmentContent } from "@/lib/content";
 import { getBuildingTotalM2, type FloorPlan } from "@/lib/lots";
+import type { LotId } from "@/lib/mapa";
 
 type PanelKey = "ground" | "upper" | string;
 
 type InfoAccordionProps = {
+  lotId: LotId;
   groundFloor?: FloorPlan;
   upperFloor?: FloorPlan;
   onExpandedChange?: (expanded: boolean) => void;
 };
+
+function specValue(spec: InvestmentContent["lotSpecs"][number], lotId: LotId): string {
+  if ("values" in spec) {
+    return spec.values[lotId];
+  }
+  return spec.value;
+}
 
 function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<PanelKey, boolean>> {
   return Object.fromEntries(
@@ -19,7 +28,7 @@ function panelsExcept(closedKey: PanelKey, allKeys: PanelKey[]): Partial<Record<
   );
 }
 
-export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: InfoAccordionProps) {
+export function InfoAccordion({ lotId, groundFloor, upperFloor, onExpandedChange }: InfoAccordionProps) {
   const dict = useDictionary();
   const investment = getInvestment(dict);
   const [openAll, setOpenAll] = useState(false);
@@ -112,7 +121,7 @@ export function InfoAccordion({ groundFloor, upperFloor, onExpandedChange }: Inf
             <summary className="t-neue-14-bold" onClick={handleSummaryClick(spec.id)}>
               {spec.label}
             </summary>
-            <div className="m14-info__content">{spec.value}</div>
+            <div className="m14-info__content">{specValue(spec, lotId)}</div>
           </details>
         ))}
       </div>

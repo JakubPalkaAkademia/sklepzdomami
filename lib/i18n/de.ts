@@ -198,8 +198,26 @@ export const de: Dictionary = {
     ],
     specsTitle: "informationen",
     lotSpecs: [
-      { id: "price", label: "preis", value: "8.900 zł pro m²" },
-      { id: "status", label: "status", value: "im Bau" },
+      {
+        id: "price",
+        label: "preis",
+        values: {
+          "7A": "8.900 zł pro m²",
+          "7B": "9.600 zł pro m²",
+          "7C": "8.900 zł pro m²",
+          "7D": "9.600 zł pro m²",
+        },
+      },
+      {
+        id: "status",
+        label: "status",
+        values: {
+          "7A": "im Bau - verfügbar",
+          "7B": "im Bau - Reservierung",
+          "7C": "im Bau - verfügbar",
+          "7D": "im Bau - Reservierung",
+        },
+      },
       { id: "address", label: "adresse", value: "Szmaragdowa 7, 73-108 Morzyczyn" },
     ],
     siteBasicsTitle: "Informationen",
